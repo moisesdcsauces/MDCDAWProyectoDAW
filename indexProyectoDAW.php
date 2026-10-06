@@ -80,7 +80,7 @@
   <!-- Bloque: Pie -->
   <footer class="pie">
     <div class="pie__redes">
-      <a class="pie__red" href="https://github.com/moisesdcsauces" target="_blank" rel="noopener" aria-label="GitHub">
+      <a class="pie__red" href="https://github.com/moisesdcsauces/MDCDAWProyectoDAW" target="_blank" rel="noopener" aria-label="GitHub">
         <img src="../../webroot/images/icons/github.png" alt="">
       </a>
       <a class="pie__red" href="https://www.linkedin.com/in/mois%C3%A9s-alberto-dom%C3%ADnguez-cruz/" target="_blank" rel="noopener" aria-label="LinkedIn">
