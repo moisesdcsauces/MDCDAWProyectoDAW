@@ -1,0 +1,182 @@
+/* ============================================
+   PÁGINAS DE ASIGNATURA
+   ============================================ */
+[hidden] {
+  display: none !important;
+}
+
+/* ============================================
+   BLOQUE: ASIGNATURA (banda de título)
+   ============================================ */
+.asignatura {
+  position: relative;
+  background: var(--color-negro);
+  color: var(--color-blanco);
+  padding: 56px var(--margen-lateral) 16px;
+  text-align: center;
+}
+
+.asignatura__volver {
+  position: absolute;
+  top: 20px;
+  left: var(--margen-lateral);
+  font-family: var(--fuente-texto);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-blanco);
+  border-bottom: 1px solid var(--color-blanco);
+  opacity: 0.6;
+  transition: opacity 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.asignatura__volver:hover,
+.asignatura__volver:focus-visible {
+  opacity: 1;
+  color: var(--color-azul-claro);
+  border-color: var(--color-azul-claro);
+}
+
+.asignatura__etiqueta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-family: var(--fuente-texto);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--color-azul-claro);
+}
+
+.asignatura__cruz {
+  height: 14px;
+  width: auto;
+}
+
+.asignatura__titulo {
+  max-width: 696px;
+  margin: 0 auto;
+  font-family: var(--fuente-titulos);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+/* ============================================
+   BLOQUE: ÍNDICE
+   ============================================ */
+.indice {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+  max-width: var(--ancho-contenido);
+  margin: 0 auto;
+  padding: 8px var(--margen-lateral) 12px;
+}
+
+/* ============================================
+   BLOQUE: TEMAS (cuadricula de UT, siempre visibles)
+   ============================================ */
+.temas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0 1px 1px 0;
+}
+
+/* cada tema dibuja su borde y se solapa 1px con el vecino: sin fondo negro, la ultima fila incompleta no deja huecos */
+.tema {
+  background: var(--color-blanco);
+  padding: 14px 18px;
+  border: 1px solid var(--color-negro);
+  margin: 0 -1px -1px 0;
+}
+
+.tema__numero {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--fuente-texto);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-azul);
+}
+
+.tema__titulo {
+  font-family: var(--fuente-titulos);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.titulo-enlace:hover{
+    color: var(--color-azul);
+    text-decoration: underline;
+}
+
+/* ============================================
+   BLOQUE: PRÁCTICAS (lista de enlaces dentro de cada tema)
+   ============================================ */
+.tema__practicas {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tema__practica {
+  font-family: var(--fuente-texto);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+a.tema__practica {
+  color: var(--color-azul);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+a.tema__practica:hover,
+a.tema__practica:focus-visible {
+  border-color: var(--color-azul);
+}
+
+.tema__practica--pendiente {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.45;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  .asignatura__titulo {
+    font-size: 26px;
+  }
+
+  .temas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .asignatura__titulo {
+    font-size: 22px;
+  }
+
+  .temas {
+    grid-template-columns: 1fr;
+  }
+}
