@@ -41,8 +41,8 @@
         <div class="tema">
           <h2 class="tema__titulo"><span class="tema__numero">UT2</span> Implantación, configuración y administración de servidores web</h2>
           <ul class="tema__practicas">
-            <li class="tema__practica tema__practica--pendiente"><a class="titulo-enlace" href="/doc/USED-ServidorWeb.pdf" target="_blank">USED-ServidorWeb.pdf</a></li>
-            <li class="tema__practica tema__practica--pendiente"><a class="titulo-enlace" href="/doc/W11ED-ClienteDesarrollo.pdf" target="_blank">W11ED-ClienteDesarrollo.pdf</a></li>
+            <li class="tema__practica tema__practica--pendiente"><a class="titulo-enlace" href="doc/USED-ServidorWeb.pdf" target="_blank">USED-ServidorWeb.pdf</a></li>
+            <li class="tema__practica tema__practica--pendiente"><a class="titulo-enlace" href="doc/W11ED-ClienteDesarrollo.pdf" target="_blank">W11ED-ClienteDesarrollo.pdf</a></li>
           </ul>
         </div>
 
