@@ -27,7 +27,17 @@
     - [4.1. Instalación de PHP 8.5-FPM](#41-instalación-de-php-85-fpm)
     - [4.2. Integración de PHP-FPM con Apache2](#42-integración-de-php-fpm-con-apache2)
     - [4.3. Comprobación del Servicio PHP-FPM](#43-comprobación-del-servicio-php-fpm)
-
+  - [5. MariaDB](#5-mariadb)
+    - [5.1. Instalación de MariaDB](#51-instalación-de-mariadb)
+    - [5.2. Configuración de MariaDB](#52-configuración-de-mariadb)
+        - [Configuración de puerto](#configuración-de-puerto)
+        - [Creación de Usuario](#creación-de-usuario)
+        - [Instalación Segura](#instalación-segura)
+        - [Instalación de Modulo de mysql en PHP](#instalación-de-modulo-de-mysql-en-php)
+        - [Abrir Puerto en UFW](#abrir-puerto-en-ufw)
+    - [5.3. Comprobación del Servicio MariaDB](#53-comprobación-del-servicio-mariadb)
+    - [5.4 Instalación de phpMyAdmin](#54-instalación-de-phpmyadmin)
+    - [5.5 Comprobación de phpmyadmin](#55-comprobación-de-phpmyadmin)
 ---
 
 ## 1. Configuración Inicial
@@ -369,3 +379,108 @@ sudo systemctl status php*-fpm
 # Comprobar la versión instalada de PHP
 php -v
 ```
+
+## 5. MariaDB
+
+### 5.1. Instalación de MariaDB
+
+```bash
+sudo apt update
+
+# Instalar mariadb-server
+sudo apt install mariadb-server -y
+
+# Reiniciar mariadb-server 
+sudo systemctl restart mariadb 
+```
+
+---
+
+### 5.2. Configuración de MariaDB
+
+#### Configuración de puerto
+
+- Usar `sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf` para entrar el archivo de configuracion
+- Busca la linea `bind-address = 127.0.0.1`
+- Cambiala a `bind-address = 0.0.0.0`
+- Guarda cambios
+
+#### Creación de Usuario
+
+- Usa el comando `sudo mariadb` para entrar a mariadb
+- Usa el comando `CREATE USER 'adminsql'@'%' IDENTIFIED BY 'paso';` para crear el usuario
+- Usa el comando `GRANT ALL ON *.* TO 'adminsql'@'%' WITH GRANT OPTION;` para otorgar los privilegios de admin
+- Usa el comando `SELECT User, Host FROM mysql.user;` para comprobar si el usuario se creo correctamente
+- Usa `exit` para salir de mariadb
+
+#### Instalación Segura
+
+- Usa el comando `sudo mariadb-secure-installation` iniciar la instalacion segura
+
+**Responder de la siguiente forma**
+- Contraseña de root (vacia por predeterminado): *PULSA ENTER* 
+- Cambiar a autentificación unix_socket: `Y`
+- Cambiar a contraseña de root: `Y`
+- Nueva contraseña: `paso`
+- Eliminar usuarios anonimos:`Y`
+- No permitir iniciar sesion con root remotamente:`Y`
+- Eliminar base de datos "test": `Y`
+- Recargar privilegios: `Y`
+
+#### Instalación de Modulo de mysql en PHP
+
+```bash
+# Instalar extension
+sudo apt install php8.5-mysql
+
+# Reiniciar servicio
+sudo systemctl restart php8.5-fpm
+
+```
+
+#### Abrir Puerto en UFW
+
+```bash
+# abrir puerto
+sudo ufw allow mysql
+
+```
+
+---
+
+### 5.3. Comprobación del Servicio MariaDB
+
+```bash
+# Comprobar puerto
+sudo ss -punta |grep mariadb
+
+# Comprobar servicio
+sudo systemctl status mariadb
+
+# Comprobar puerto abierto en el cortafuegos
+sudo ufw status
+
+```
+
+---
+
+### 5.4 Instalación de phpMyAdmin
+
+- Usa el comando `sudo apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl` iniciar la instalacion de phpmyadmin
+
+**Advertencia! Seguir Pasos**
+- Seleccion del servidor escoge: `Apache 2`  
+- **Pulsa la barra espaciadora para seleccionar Apache2**
+- Presiona **TAB** y Luego **ENTER**
+- Utilizar dbconfig-common para configurarbase de datos: `YES`
+- Eligir contraseña: `paso`
+- Reescribir contraseña: `paso`
+- Ingresar contraseña: `paso`
+
+---
+### 5.5 Comprobación de phpmyadmin
+
+Accede a traves de la URL **http://IP/phpmyadmin**
+
+
+Autor: Moises Dominguez Cruz
