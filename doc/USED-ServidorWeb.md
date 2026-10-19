@@ -191,7 +191,7 @@ Dentro de `<VirtualHost *:80>`, añade o modifica:
 
 ### 3.3. Habilitar .htaccess (AllowOverride)
 
-El archivo `.htaccess` se activa su uso con la directiva AllowOverride[cite: 22].
+El archivo `.htaccess` se activa su uso con la directiva AllowOverride.
 
     sudo nano /etc/apache2/apache2.conf
 
@@ -204,32 +204,32 @@ Crea el archivo y reinicia:
 
 ### 3.4. Configuración HTTPS (Certificado SSL MDC)
 
-Generar un certificado SSL almacena información básica sobre un sitio y lo acompaña de un archivo de claves para manejar datos cifrados de forma segura[cite: 11]. Generaremos la clave privada y el CSR (Certificate Signing Request) que garantiza la integridad y autenticación[cite: 10].
+Generar un certificado SSL almacena información básica sobre un sitio y lo acompaña de un archivo de claves para manejar datos cifrados de forma segura. Generaremos la clave privada y el CSR (Certificate Signing Request) que garantiza la integridad y autenticación.
 
-Activamos el módulo SSL de Apache, que se basa en OpenSSL para proporcionar el modo de criptografía[cite: 14]:
+Activamos el módulo SSL de Apache, que se basa en OpenSSL para proporcionar el modo de criptografía:
 
     sudo a2enmod ssl
 
-Comando para crear los archivos del certificado[cite: 11]:
+Comando para crear los archivos del certificado:
 
     sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
 
-Información solicitada por el sistema (CSR)[cite: 12]:
-*   **Country Name:** `ES`[cite: 12]
-*   **State or Province Name:** `ZAMORA`[cite: 12]
-*   **Locality Name:** `BENAVENTE`[cite: 12]
-*   **Organization Name:** `IES LOS SAUCES` (Preferente en mayúsculas)[cite: 12].
-*   **Organizational Unit Name:** `INFORMATICA`[cite: 12]
-*   **Common Name:** `mdc-used` (Nombre del dominio/servidor sin espacios)[cite: 12].
-*   **Email Address:** (Dejar en blanco)[cite: 12].
+Información solicitada por el sistema (CSR):
+*   **Country Name:** `ES`
+*   **State or Province Name:** `ZAMORA`
+*   **Locality Name:** `BENAVENTE`
+*   **Organization Name:** `IES LOS SAUCES` (Preferente en mayúsculas).
+*   **Organizational Unit Name:** `INFORMATICA`
+*   **Common Name:** `mdc-used` (Nombre del dominio/servidor sin espacios).
+*   **Email Address:** (Dejar en blanco).
 
-Configuración del sitio virtual seguro[cite: 16]:
+Configuración del sitio virtual seguro:
 
     cd /etc/apache2/sites-available/
     sudo cp default-ssl.conf default-ssl.conf.backup
     sudo nano default-ssl.conf
 
-Configuración dentro de `<VirtualHost *:443>`[cite: 16, 17]:
+Configuración dentro de `<VirtualHost *:443>`:
 
     ServerAdmin webmaster@localhost
     ServerName 10.199.9.184
@@ -240,7 +240,7 @@ Configuración dentro de `<VirtualHost *:443>`[cite: 16, 17]:
     ErrorLog ${APACHE_LOG_DIR}/mdc-ssl-error.log
     CustomLog ${APACHE_LOG_DIR}/mdc-ssl-access.log combined
 
-Activación del sitio virtual seguro[cite: 18]:
+Activación del sitio virtual seguro:
 
     sudo a2ensite default-ssl.conf
     sudo ufw allow 443
@@ -250,11 +250,11 @@ Comprobación desde el navegador estableciendo una conexión segura[cite: 18]: `
 
 ### 3.5. Redirección de HTTP a HTTPS
 
-Activamos el módulo rewrite, necesario para redirigir de un sitio a otro[cite: 21]:
+Activamos el módulo rewrite, necesario para redirigir de un sitio a otro:
 
     sudo a2enmod rewrite
 
-En el archivo `.htaccess` (previamente activado), añadimos las directivas de redirección[cite: 23]:
+En el archivo `.htaccess` (previamente activado), añadimos las directivas de redirección:
 
     sudo nano /var/www/html/.htaccess
 
@@ -264,7 +264,7 @@ Añade lo siguiente[cite: 23, 24]:
     RewriteCond %{SERVER_PORT} 80
     RewriteRule ^(.*)$ https://10.199.9.184/$1 [R,L]
 
-*Explicación de directivas:* `RewriteEngine On` habilita el módulo[cite: 24]. `RewriteCond %{SERVER_PORT} 80` indica que todas las peticiones al puerto 80 pasen por la regla especificada[cite: 24]. `[R,L]` realiza la redirección y deshabilita que reglas de reescritura posteriores afecten a la URL[cite: 24].
+*Explicación de directivas:* `RewriteEngine On` habilita el módulo[cite: 24]. `RewriteCond %{SERVER_PORT} 80` indica que todas las peticiones al puerto 80 pasen por la regla especificada[cite: 24]. `[R,L]` realiza la redirección y deshabilita que reglas de reescritura posteriores afecten a la URL.
 
 Reinicia y testea:
 
