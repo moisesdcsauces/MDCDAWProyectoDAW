@@ -191,11 +191,21 @@ Dentro de `<VirtualHost *:80>`, añade o modifica:
 
 ### 3.3. Habilitar .htaccess (AllowOverride)
 
-El archivo `.htaccess` se activa su uso con la directiva AllowOverride.
+El archivo `.htaccess` se activa su uso con la directiva AllowOverride[cite: 22]. Lo configuraremos directamente en nuestro VirtualHost:
 
-    sudo nano /etc/apache2/apache2.conf
+    sudo nano /etc/apache2/sites-available/000-default.conf
 
-Busca `<Directory /var/www/>` y cambia `AllowOverride None` por `AllowOverride All`.
+Añade el bloque `<Directory>` dentro de tu `<VirtualHost *:80>` asegurándote de que quede configurado así:
+
+    <VirtualHost *:80>
+        # ... otras configuraciones que ya tengas (ServerAdmin, ErrorLog, etc) ...
+        DocumentRoot /var/www/html
+
+        <Directory /var/www/html>
+            AllowOverride All
+            Require all granted
+        </Directory>
+    </VirtualHost>
 
 Crea el archivo y reinicia:
 
