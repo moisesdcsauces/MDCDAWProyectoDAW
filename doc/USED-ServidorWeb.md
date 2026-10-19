@@ -258,7 +258,7 @@ En el archivo `.htaccess` (previamente activado), añadimos las directivas de re
 
     sudo nano /var/www/html/.htaccess
 
-Añade lo siguiente[cite: 23, 24]:
+Añade lo siguiente:
 
     RewriteEngine On
     RewriteCond %{SERVER_PORT} 80
