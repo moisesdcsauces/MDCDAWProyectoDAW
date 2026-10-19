@@ -256,7 +256,7 @@ Activación del sitio virtual seguro:
     sudo ufw allow 443
     sudo systemctl restart apache2
 
-Comprobación desde el navegador estableciendo una conexión segura[cite: 18]: `https://10.199.9.184`.
+Comprobación desde el navegador estableciendo una conexión segura: `https://10.199.9.184`.
 
 ### 3.5. Redirección de HTTP a HTTPS
 
