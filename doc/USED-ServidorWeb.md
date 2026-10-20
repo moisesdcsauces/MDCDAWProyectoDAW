@@ -189,28 +189,27 @@ Dentro de `<VirtualHost *:80>`, añade o modifica:
     ErrorLog /var/www/html/error/error.log
     ErrorDocument 404 /error/404.html
 
-### 3.3. Habilitar .htaccess (AllowOverride)
+### 3.3. Habilitar (AllowOverride)
 
-El archivo `.htaccess` se activa su uso con la directiva AllowOverride. Lo configuraremos directamente en nuestro VirtualHost:
+Usar el comando `sudo a2enmod rewrite` para activar el modulo de rewrite   
 
-    sudo nano /etc/apache2/sites-available/000-default.conf
+Entrar al archivo de configuracion usando `sudo nano /etc/apache2/apache2.conf`  
 
-Añade el bloque `<Directory>` dentro de tu `<VirtualHost *:80>` asegurándote de que quede configurado así:
+**Modificar el valor de AllowOverride en el archivo:**
+```bash
+<Directory /var/www/>
+  ...
+  AllowOverride All
+</Directory>
 
-    <VirtualHost *:80>
-        # ... otras configuraciones que ya tengas (ServerAdmin, ErrorLog, etc) ...
-        DocumentRoot /var/www/html
+ServerName mdc-used
+```
 
-        <Directory /var/www/html>
-            AllowOverride All
-            Require all granted
-        </Directory>
-    </VirtualHost>
+Comprobacion del archivo: `sudo apache2ctl configtest`
 
-Crea el archivo y reinicia:
+Recarga del servicio: `sudo systemctl reload apache2`
 
-    sudo touch /var/www/html/.htaccess
-    sudo systemctl restart apache2
+Reinicio del servicio: `sudo systemctl restart apache2`
 
 ### 3.4. Configuración HTTPS (Certificado SSL MDC)
 
@@ -274,7 +273,7 @@ Añade lo siguiente:
     RewriteCond %{SERVER_PORT} 80
     RewriteRule ^(.*)$ https://10.199.9.184/$1 [R,L]
 
-*Explicación de directivas:* `RewriteEngine On` habilita el módulo[cite: 24]. `RewriteCond %{SERVER_PORT} 80` indica que todas las peticiones al puerto 80 pasen por la regla especificada[cite: 24]. `[R,L]` realiza la redirección y deshabilita que reglas de reescritura posteriores afecten a la URL.
+*Explicación de directivas:* `RewriteEngine On` habilita el módulo. `RewriteCond %{SERVER_PORT} 80` indica que todas las peticiones al puerto 80 pasen por la regla especificada. `[R,L]` realiza la redirección y deshabilita que reglas de reescritura posteriores afecten a la URL.
 
 Reinicia y testea:
 
@@ -299,7 +298,7 @@ Le asignamos la propiedad del directorio y permisos:
 
 ---
 
-## 5. Ejecución PHP con PHP-FPM
+## 5. PHP-FPM
 
 ### 5.1. Instalación de PHP-FPM
 
