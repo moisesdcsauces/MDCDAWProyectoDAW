@@ -1,11 +1,11 @@
-# Guía de Instalación y Configuración: Ubuntu Server (MDC-USLimpia)
+# Guía de Instalación y Configuración: Ubuntu Server (MDC-USED)
 *(Servidor de desarrollo para aplicaciones web basadas en el uso de PHP)*
 
 ---
 
 ## Índice de Contenidos
 
-- [Guía de Instalación y Configuración: Ubuntu Server (MDC-USLimpia)](#guía-de-instalación-y-configuración-ubuntu-server-mdc-uslimpia)
+- [Guía de Instalación y Configuración: Ubuntu Server (MDC-USLimpia)](#guía-de-instalación-y-configuración-ubuntu-server-mdc-used)
   - [Índice de Contenidos](#índice-de-contenidos)
   - [1. Configuración Inicial](#1-configuración-inicial)
     - [1.1. Preparación e Instalación del SO](#11-preparación-e-instalación-del-so)
@@ -43,7 +43,7 @@
 
 ### 1.1. Preparación e Instalación del SO
 
-*   **Nombre de la máquina:** `MDC-USLimpia`
+*   **Nombre de la máquina:** `MDC-USED`
 *   **RAM:** `2048 MB` (2 GB)
 *   **Particiones:** `150GB` (`/`), `350GB` (`/var`) y `4GB` de `swap`.
 
@@ -61,7 +61,7 @@ Para verificar tu sistema operativo, versión y particiones:
 
 Asegúrate de que el nombre del host sea correcto:
 
-    sudo hostnamectl set-hostname MDC-USLimpia
+    sudo hostnamectl set-hostname MDC-USED
     sudo nano /etc/hosts
 
 Para configurar la red estática editamos Netplan:
@@ -191,7 +191,7 @@ Dentro de `<VirtualHost *:80>`, añade o modifica:
 
 ### 3.3. Habilitar .htaccess (AllowOverride)
 
-El archivo `.htaccess` se activa su uso con la directiva AllowOverride[cite: 22]. Lo configuraremos directamente en nuestro VirtualHost:
+El archivo `.htaccess` se activa su uso con la directiva AllowOverride. Lo configuraremos directamente en nuestro VirtualHost:
 
     sudo nano /etc/apache2/sites-available/000-default.conf
 
@@ -406,16 +406,7 @@ Configuramos el acceso en Apache creando un enlace simbólico:
 
 ---
 
-## 8. Módulos PHP
-
-Instala extensiones clave para que PHP se comunique con MariaDB:
-
-    sudo apt install php8.5-mysql php8.5-intl
-    sudo systemctl restart php8.5-fpm
-
----
-
-## 9. XDebug
+## 8. XDebug
 
 ## 10. Sitios Virtuales y DirectoryIndex
 
