@@ -5,7 +5,7 @@
 
 ## Índice de Contenidos
 
-- [Guía de Instalación y Configuración: Ubuntu Server (MDC-USLimpia)](#guía-de-instalación-y-configuración-ubuntu-server-mdc-used)
+- [Guía de Instalación y Configuración: Ubuntu Server (MDC-USED)](#guía-de-instalación-y-configuración-ubuntu-server-mdc-used)
   - [Índice de Contenidos](#índice-de-contenidos)
   - [1. Configuración Inicial](#1-configuración-inicial)
     - [1.1. Preparación e Instalación del SO](#11-preparación-e-instalación-del-so)
@@ -57,7 +57,7 @@ Para verificar tu sistema operativo, versión y particiones:
     lsblk -a
     fdisk -l
 
-### 1.2. Configuración de Red (Netplan: Clase y Casa)
+### 1.2. Configuración de Red y Cambio de Nombre (Netplan: Clase y Casa)
 
 Asegúrate de que el nombre del host sea correcto:
 
@@ -381,7 +381,7 @@ Dentro de SQL ejecuta:
 
 Asegura el servidor ejecutando este script y siguiendo las instrucciones en pantalla:
 
-    sudo mysql_secure_installation
+    sudo mariadb-secure-installation
 
 ---
 
