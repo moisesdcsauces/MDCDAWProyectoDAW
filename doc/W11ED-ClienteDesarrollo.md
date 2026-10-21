@@ -80,7 +80,7 @@ Descargar MobaXterm en este enlace : https://mobaxterm.mobatek.net/download.html
 ![alt text](../images/image.png)
 
 ### 5.2 Creación de proyectos, modificación, borrado, prueba.
-* **Creación**: Los proyectos se guardarán en el disco de datos, en una carpeta llamada `PROYECTOS-NETBEANS` con la ruta `D:\PROYECTOS-NETBEANS`[cite: 30]. Para crear un proyecto nuevo, se hace clic en **File > New Project**, eligiendo la categoría PHP y el tipo "PHP Application". Se le asigna un nombre (ej. `DWESProyectoTema4`) y se indica el directorio local. La configuración base utiliza PHP 8.3 y codificación por defecto UTF-8.
+* **Creación**: Los proyectos se guardarán en el disco de datos, en una carpeta llamada `PROYECTOS-NETBEANS` con la ruta `D:\PROYECTOS-NETBEANS`. Para crear un proyecto nuevo, se hace clic en **File > New Project**, eligiendo la categoría PHP y el tipo "PHP Application". Se le asigna un nombre (ej. `DWESProyectoTema4`) y se indica el directorio local. La configuración base utiliza PHP 8.3 y codificación por defecto UTF-8.
 
 ![alt text](../images/image-8.png)
 
