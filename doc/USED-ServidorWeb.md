@@ -326,7 +326,7 @@ Reiniciar ambos servicios para aplicar los cambios:
 Hacer copia de seguridad y editar:
 
     cd /etc/php/8.5/fpm/
-    sudo cp php.ini php.ini.bk2025
+    sudo cp php.ini php.ini.bk2026
     sudo nano php.ini
 
 Modifica las siguientes directivas para tu entorno de desarrollo:
