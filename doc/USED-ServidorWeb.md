@@ -31,11 +31,10 @@
     - [6.2. Creación de Usuario Administrador](#62-creación-de-usuario-administrador)
     - [6.3. Asistente de Seguridad](#63-asistente-de-seguridad)
   - [7. phpMyAdmin](#7-phpmyadmin)
-  - [8. Módulos PHP](#8-módulos-php)
-  - [9. XDebug](#9-xdebug)
-  - [10. Sitios Virtuales y DirectoryIndex](#10-sitios-virtuales-y-directoryindex)
-  - [11. SFTP (Usuarios Enjaulados)](#11-sftp-usuarios-enjaulados)
-  - [12. Herramientas de Desarrollo (phpDocumentor)](#12-herramientas-de-desarrollo-phpdocumentor)
+  - [8. XDebug](#8-xdebug)
+  - [9. Sitios Virtuales y DirectoryIndex](#9-sitios-virtuales-y-directoryindex)
+  - [10. SFTP (Usuarios Enjaulados)](#10-sftp-usuarios-enjaulados)
+  - [11. Herramientas de Desarrollo (phpDocumentor)](#11-herramientas-de-desarrollo-phpdocumentor)
 
 ---
 
@@ -259,6 +258,8 @@ Comprobación desde el navegador estableciendo una conexión segura: `https://10
 
 ### 3.5. Redirección de HTTP a HTTPS
 
+Para activar este servicio se tiene que hacer con el operadorweb desde el CMD o MobaXterm.
+
 Activamos el módulo rewrite, necesario para redirigir de un sitio a otro:
 
     sudo a2enmod rewrite
@@ -407,11 +408,11 @@ Configuramos el acceso en Apache creando un enlace simbólico:
 
 ## 8. XDebug
 
-## 10. Sitios Virtuales y DirectoryIndex
+## 9. Sitios Virtuales y DirectoryIndex
 
-## 11. SFTP (Usuarios Enjaulados)
+## 10. SFTP (Usuarios Enjaulados)
 
-## 12. Herramientas de Desarrollo (phpDocumentor)
+## 11. Herramientas de Desarrollo (phpDocumentor)
 
 
 Autor: Moises Dominguez Cruz
