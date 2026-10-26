@@ -270,8 +270,8 @@ El archivo tiene que tener este formato (modificar `name`, `host` y `remotePath`
 
 **Sincronización Manual:**
 Para subir/descargar archivos manualmente (obligatorio para imágenes o documentos externos que no saltan al guardar), podemos seleccionar el archivo en cuestión, la carpeta o el proyecto entero en el explorador de archivos, hacer clic derecho y darle a:
-* **Sync Local -> Remote:** Para pasar lo del local a remoto.
-* **Sync Remote -> Local:** Para pasar lo del remoto a local.
+* **Sync Local -> Remote:** Para pasarlo del local a remoto.
+* **Sync Remote -> Local:** Para pasarlo del remoto a local.
 * **Sync Both Directions:** Para hacer ambos a la vez.
 
 ### 6.4 Administración de la base de datos
