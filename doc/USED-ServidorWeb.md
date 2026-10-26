@@ -9,7 +9,7 @@
   - [Índice de Contenidos](#índice-de-contenidos)
   - [1. Configuración Inicial](#1-configuración-inicial)
     - [1.1. Preparación e Instalación del SO](#11-preparación-e-instalación-del-so)
-    - [1.2. Configuración de Red (Netplan: Clase y Casa)](#12-configuración-de-red-netplan-clase-y-casa)
+    - [1.2. Configuración de Red y Cambio de nombre](#12-configuración-de-red-y-cambio-de-nombre)
     - [1.3. Actualización, Fecha, SSH, Firewall y Antivirus](#13-actualización-fecha-ssh-firewall-y-antivirus)
     - [1.4. Comprobación del Sistema y Conexión](#14-comprobación-del-sistema-y-conexión)
   - [2. Cuentas de Administración](#2-cuentas-de-administración)
@@ -56,7 +56,7 @@ Para verificar tu sistema operativo, versión y particiones:
     lsblk -a
     fdisk -l
 
-### 1.2. Configuración de Red y Cambio de Nombre (Netplan: Clase y Casa)
+### 1.2. Configuración de Red y Cambio de Nombre
 
 Asegúrate de que el nombre del host sea correcto:
 
