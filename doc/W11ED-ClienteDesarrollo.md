@@ -18,6 +18,12 @@
     - [5.3 Administración de la base de datos](#53-administración-de-la-base-de-datos)
     - [5.4 Conexión al repositorio y versionado (Git)](#54-conexión-al-repositorio-y-versionado-git)
     - [5.5 Depuración (Configuración de la ejecución para la depuración)](#55-depuración-configuración-de-la-ejecución-para-la-depuración)
+  - [6. Visual Studio Code](#6-visual-studio-code)
+    - [6.1 Instalación y Extensiones.](#61-instalación-y-extensiones)
+    - [6.2 Cómo crear un Workspace.](#62-cómo-crear-un-workspace)
+    - [6.3 Conexión SFTP con máquina de desarrollo.](#63-conexión-sftp-con-máquina-de-desarrollo)
+    - [6.4 Administración de la base de datos.](#64-administración-de-la-base-de-datos)
+    - [6.5 Control de versiones (Git).](#65-control-de-versiones-git)
   - [Configuraciones Adicionales y Herramientas del IDE pendientes](#configuraciones-adicionales-y-herramientas-del-ide-pendientes)
 ---
 
@@ -169,8 +175,167 @@ Una vez conectado el repositorio, existen estas opciones que al hacer clic derec
 
 ### 5.5 Depuración (Configuración de la ejecución para la depuración)
 
+## 6. Visual Studio Code
+
+### 6.1 Instalación y Extensiones
+
+**Instalación paso a paso de VS Code:**
+1. Accede al sitio web oficial: `https://code.visualstudio.com/` y descarga el instalador para Windows.
+2. Ejecuta el archivo descargado.
+3. Acepta los términos de la licencia y selecciona la ruta de instalación por defecto.
+4. En la pantalla de tareas adicionales, es **muy recomendable marcar las opciones**:
+   * *Añadir la acción "Abrir con Code" al menú contextual de archivos.*
+   * *Añadir la acción "Abrir con Code" al menú contextual de directorios.*
+   * *Agregar a PATH (requiere reiniciar).*
+5. Haz clic en Instalar y, al finalizar, ejecuta la aplicación.
+
+**Instalación de Extensiones:**
+Primero, instalamos estas extensiones buscando en la pestaña Extensions (icono de cuadros en el menú lateral izquierdo o presionando `Ctrl+Shift+X`):
+
+**Extensiones obligatorias:**
+* **SFTP:** Para subir/bajar archivos al servidor automáticamente.
+* **PHP Extension Pack:** Incluye Xdebug y utilidades base.
+* **PHP Intelephense:** Herramienta esencial de autocompletado avanzado y sintaxis para PHP.
+* **SQLTools:** Para administrar bases de datos.
+* **MySQL/MariaDB Support for SQLTools:** Driver necesario para conectar SQLTools con tu servidor Ubuntu.
+
+**Extensiones opcionales pero bastante útiles:**
+* Live Server, VirtualBox, Prettier, HTML CSS Intellisense.
+
+![alt text](../images/image-21.png)
+
+### 6.2 Creación y Configuración del Workspace
+
+Un *workspace* es una colección de una o más carpetas abiertas en una sola ventana del editor. Sirve para organizar proyectos y aplicar configuraciones específicas a cada uno. Puedes guardar estas colecciones como un archivo `.code-workspace` con formato JSON para editar y compartir fácilmente la configuración.
+
+Para crearlo:
+1. Abre una ventana vacía sin ninguna carpeta abierta (`Ctrl + Shift + N`).
+2. Arriba del todo a la izquierda, ve a **File > Add Folder to Workspace...**
+
+![alt text](../images/image-22.png)
+
+3. Nos abrirá un explorador. Yo recomiendo que, en el directorio que prefieras, crees una carpeta raíz para el workspace, y dentro se cree una carpeta para cada proyecto. Algo así:
+   ```
+   D:\
+   └── PROYECTOS-VISUAL-STUDIO -> (Carpeta Workspace general)
+       ├── MDCDWESProyectoPEPE
+       ├── MDCDWECProyectoDWEC -> (Carpetas de proyectos)
+       ├── MDCDWESProyectoTema5
+       └── ...
+   ```
+   *Si vas a reutilizar proyectos o crear nuevos, asegúrate de que estén ubicados dentro de la carpeta del workspace `D:\PROYECTOS-VISUAL-STUDIO`.*
+4. Selecciona las carpetas **DENTRO** de `PROYECTOS-VISUAL-STUDIO`, no la carpeta en sí (se pueden seleccionar todas a la vez).
+5. Una vez hecho, en el explorador del editor aparecerán los diferentes proyectos.
+
+![alt text](../images/image-23.png)
+
+6. **IMPORTANTE:** Ve a **File > Save Workspace As...** y guárdalo (preferiblemente en la carpeta del workspace). Es necesario para algunas configuraciones más tarde.
+
+![alt text](../images/image-24.png)
+
+> **⚠️ IMPORTANTE:** A partir de aquí, las siguientes configuraciones (SFTP, Git, Base de Datos y Debug) se aplican de forma independiente **DENTRO de cada uno de los proyectos** de tu Workspace.
+
+### 6.3 Conexión SFTP con máquina de desarrollo
+
+En cada proyecto creamos una carpeta llamada `.vscode/` y dentro un archivo `sftp.json`. *(O se hace una vez y copiamos y pegamos la carpeta más rápido).*
+
+El archivo tiene que tener este formato (modificar `name`, `host` y `remotePath`, y borrar los comentarios para que funcione):
+```json
+{
+  "name": "MDC-ConexionSFTP", # Nombre identificativo para la conexión
+  "context": ".", # Carpeta donde se suben/descargan los archivos en local ('.' = carpeta proyecto)
+  "host": "10.199.9.184", # Dirección IP o dominio del servidor remoto
+  "username": "operadorweb", # Nombre de usuario de acceso al servidor.
+  "password": "paso", # Si no se pone te pregunta cada vez que cierres y abres el editor
+  "remotePath": "/var/www/html/MDCDWESProyectoTema4", # Ruta del directorio destino en el servidor remoto
+  "uploadOnSave": true, # Sube archivos automaticamente al modificar
+  "ignore": [ # Lista de archivos o carpetas que la extensión debe omitir al sincronizar
+      ".git",
+      ".DS_Store"
+  ],
+  "remoteExplorer": { # Sirve para ocultar archivos y carpetas en la vista del árbol del explorador remoto
+    "filesExclude": [
+      ".git",
+      ".DS_Store",
+      ".cache",
+      ".local",
+      ".cache",
+      ".bash_history",
+      ".bashrc"
+    ]
+  }
+}
+```
+*(Nota: `"context": "."` = carpeta del proyecto; Si no pones `"password"`, te preguntará cada vez que cierres y abras el editor; `"uploadOnSave": true` sube archivos automáticamente al modificar).*
+
+**Sincronización Manual:**
+Para subir/descargar archivos manualmente (obligatorio para imágenes o documentos externos que no saltan al guardar), podemos seleccionar el archivo en cuestión, la carpeta o el proyecto entero en el explorador de archivos, hacer clic derecho y darle a:
+* **Sync Local -> Remote:** Para pasar lo del local a remoto.
+* **Sync Remote -> Local:** Para pasar lo del remoto a local.
+* **Sync Both Directions:** Para hacer ambos a la vez.
+
+### 6.4 Administración de la base de datos
+
+Usando la extensión **SQLTools**:
+1. En la barra lateral izquierda, haz clic en el icono de base de datos de SQLTools (tiene forma de un pequeño cilindro o servidor).
+2. Haz clic en **Add New Connection** y selecciona el driver **MySQL/MariaDB**.
+   
+![alt text](../images/image-25.png)
+
+3. Rellena los datos de tu servidor:
+   * **Connection Name:** (ej. `MDC-BaseDatos`)
+   * **Server Address:** `10.199.9.184`
+   * **Port:** `3306`
+    * **Database:** `mysql`
+   * **Username:** `adminsql`
+   * **Password:** Solicitar en cada conexión o guardar (contraseña: `paso`).
+4. Haz clic en **Save Connection** y luego en **Connect Now**. Podrás ejecutar sentencias SQL y ver tablas desplegando la conexión directamente desde VS Code.
+
+![alt text](../images/image-26.png)
+
+### 6.5 Control de versiones (Git)
+
+Para abrir el panel para el control de versiones, en la barra lateral buscamos un icono con un círculo dividido con ramas (tercer icono normalmente); o hacemos `Ctrl + Shift + G`.
+
+Desde ahí podemos controlar todo el git de cada proyecto (Hacer commits, cambiar ramas, crear y añadir tags, gestionar stashes...). Estaría bien incluir esto en el archivo `.gitignore` en la raíz de cada proyecto para no subir archivos residuales del sistema o de la configuración del editor:
+```text
+.bash_history
+.bashrc
+.wget-hsts
+.cache/
+.dotnet/
+.local/
+.ssh/
+.vscode-server/
+.vscode/
+
+*.code-workspace
+nbproject/
+```
+
+**Escenario A: Inicializar un proyecto nuevo**
+Si el proyecto no tiene Git configurado todavía:
+1. Ve al panel de control de versiones y haz clic en el botón **Initialize Repository** (Inicializar repositorio).
+2. Te aparecerán todos tus archivos listados bajo la sección "Cambios" (*Changes*).
+3. Para decirle a Git qué archivos quieres incluir en la versión, haz clic en el icono **`+`** (Stage Changes) junto a los archivos o junto a la palabra "Changes" para agregarlos todos.
+4. Escribe un mensaje descriptivo en el cuadro de texto y haz clic en el botón **Commit** (o en el *check* `✓`).
+5. Para conectarlo a GitHub, haz clic en **Publish Branch**, selecciona "Add remote" y pega la URL de tu repositorio vacío de GitHub.
+
+**Escenario B: Clonar un proyecto de GitHub**
+Si quieres traer un proyecto existente:
+1. Presiona `Ctrl + Shift + P` para abrir la paleta de comandos.
+2. Escribe `Git: Clone` y presiona Enter.
+3. Pega la URL de tu repositorio en GitHub y presiona Enter.
+4. Selecciona la carpeta de destino (ej. `D:\PROYECTOS-VISUAL-STUDIO`).
+5. VS Code te preguntará si deseas abrir el repositorio clonado.
+
+**Uso diario:**
+* **Stage y Commit:** Cada vez que modifiques archivos, aparecerán en el panel. Púlsales al **`+`** para pasarlos al área de preparación (*Staged Changes*), escribe qué has hecho en la caja superior y dale a **Commit**.
+* **Sync Changes (Sincronizar):** Una vez hecho el commit, el gran botón azul cambiará a **Sync Changes**. Pulsarlo hará un *Push* y un *Pull* simultáneamente (subirá tus cambios y descargará los de otros).
+* **Pull / Push específicos:** Puedes acceder a las opciones de Push, Pull y Fetch haciendo clic en el menú de los tres puntitos `...` en la parte superior derecha del panel de Git.
+* **Gestión de Ramas (Branches):** En la esquina inferior izquierda de la ventana de VS Code verás el nombre de tu rama actual (ej. `main` o `master`). Si haces clic en él, podrás crear nuevas ramas o cambiarte a otra existente fácilmente.
 
 ## Configuraciones Adicionales y Herramientas del IDE pendientes
-* Depuración (Configuración de la ejecución para la depuración).
+* Depuración (Tanto en Netbeans como en Visual Studio).
 * Prueba (Configuración de la ejecución para probar el desarrollo).
 * PHP Doc.
