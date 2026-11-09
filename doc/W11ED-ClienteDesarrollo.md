@@ -18,6 +18,11 @@
     - [5.3 Administración de la base de datos](#53-administración-de-la-base-de-datos)
     - [5.4 Conexión al repositorio y versionado (Git)](#54-conexión-al-repositorio-y-versionado-git)
     - [5.5 Depuración (Configuración de la ejecución para la depuración)](#55-depuración-configuración-de-la-ejecución-para-la-depuración)
+      - [5.5.1 Opciones de depuración de NetBeans](#551-opciones-de-depuración-de-netbeans)
+      - [5.5.2 Regla en el Firewall de Windows (puerto 9003)](#552-regla-en-el-firewall-de-windows-puerto-9003)
+      - [5.5.3 Configuración de ejecución y mapeo de rutas (Path Mapping)](#553-configuración-de-ejecución-y-mapeo-de-rutas-path-mapping)
+      - [5.5.4 Depurar un script](#554-depurar-un-script)
+      - [5.5.5 Solución de problemas](#555-solución-de-problemas)
   - [6. Visual Studio Code](#6-visual-studio-code)
     - [6.1 Instalación y Extensiones.](#61-instalación-y-extensiones)
     - [6.2 Cómo crear un Workspace.](#62-cómo-crear-un-workspace)
@@ -174,6 +179,76 @@ Una vez conectado el repositorio, existen estas opciones que al hacer clic derec
 * **Show History:** Te muestra una línea de tiempo interactiva en la pestaña inferior del IDE con todos los cambios, fechas, autores y *commits* del proyecto.
 
 ### 5.5 Depuración (Configuración de la ejecución para la depuración)
+
+Para depurar el código PHP paso a paso, NetBeans se conecta con el módulo **Xdebug 3** del servidor de desarrollo `MDC-USED`. *La instalación y configuración de Xdebug en el servidor está en la documentación del Servidor Web, apartado **8. XDebug**.*
+
+Hay que tener en cuenta que la conexión de depuración la inicia el **servidor**: el navegador hace la petición a la web y Xdebug se conecta de vuelta al **puerto `9003` de este equipo**, donde NetBeans está escuchando. Por eso hace falta configurar tanto NetBeans como el Firewall de Windows.
+
+#### 5.5.1 Opciones de depuración de NetBeans
+
+1. En el menú superior de NetBeans, ve a **Tools > Options** y selecciona **PHP** > pestaña **Debugging**.
+2. Configura los parámetros de depuración:
+   * **Debugger Port:** `9003` *(debe coincidir con `xdebug.client_port` del servidor)*.
+   * **Session ID:** `NetBeans` *(debe coincidir con `xdebug.idekey` del servidor; distingue mayúsculas y minúsculas)*.
+   * **Stop at First Line:** *(Opcional)* Márcala temporalmente para comprobar que la depuración funciona: la ejecución se parará en la primera línea del script aunque no haya breakpoints.
+3. Haz clic en **Apply** y **OK**.
+
+#### 5.5.2 Regla en el Firewall de Windows (puerto 9003)
+
+Como la conexión llega desde el servidor hacia este equipo, el Firewall de Windows puede bloquearla. Hay que crear una regla de entrada:
+
+1. Abre **Firewall de Windows Defender con seguridad avanzada**.
+2. Ve a **Reglas de entrada** > **Nueva regla...**
+3. Selecciona **Puerto** > **TCP** > Puertos locales específicos: `9003`.
+4. Elige **Permitir la conexión**.
+5. Marca los perfiles de red en los que trabajes (**Dominio** y **Privado**).
+6. Ponle de nombre `Xdebug NetBeans (9003)` y finaliza.
+
+También se puede crear desde una terminal **PowerShell como administrador**:
+```powershell
+New-NetFirewallRule -DisplayName "Xdebug NetBeans (9003)" -Direction Inbound -Protocol TCP -LocalPort 9003 -Action Allow -Profile Domain,Private
+```
+
+*Nota: el equipo de clase está gestionado por el dominio de la Junta (educa.jcyl), por lo que puede que no tengamos permisos de administrador para crear la regla. En ese caso, cuando Windows muestre el aviso de seguridad al iniciar la depuración la primera vez, hay que permitir el acceso a **OpenJDK / Java** (NetBeans), o pedir al administrador que abra el puerto.*
+
+#### 5.5.3 Configuración de ejecución y mapeo de rutas (Path Mapping)
+
+El proyecto ya está configurado como **Remote Web Site (FTP, SFTP)** (ver apartado 5.2). Para que NetBeans sepa qué archivo local corresponde a cada archivo del servidor:
+
+1. Haz clic derecho sobre el proyecto > **Properties** > **Run Configuration**.
+2. Comprueba que el **Project URL** apunta al proyecto en el servidor (ej. `https://10.199.9.184/MDCDWESProyectoTema4/`). *Como el servidor redirige de HTTP a HTTPS, es mejor poner directamente la URL con `https`.*
+3. Pulsa el botón **Advanced...**
+4. En **Path Mapping**, añade una entrada:
+   * **Server Path:** `/var/www/html/MDCDWESProyectoTema4` *(ruta absoluta del proyecto dentro del servidor Ubuntu)*.
+   * **Project Path:** `D:\PROYECTOS-NETBEANS\MDCDWESProyectoTema4` *(ruta del proyecto en este equipo)*.
+5. En **Debug URL** deja marcada la opción **Default** (usa el Project URL).
+6. Pulsa **OK** y de nuevo **OK** para guardar las propiedades.
+
+#### 5.5.4 Depurar un script
+
+1. **Colocar un breakpoint:** Abre un archivo PHP y haz clic sobre el número de línea en el margen izquierdo. Aparecerá un cuadro rojo.
+2. **Iniciar la depuración:** Haz clic derecho en el proyecto > **Debug**, pulsa el icono de **Debug Project** de la barra superior o **`Ctrl + F5`**. En la barra inferior aparecerá *"Waiting For Connection (NetBeans)"* y se abrirá Firefox con la URL del proyecto.
+3. Si la depuración no arranca automáticamente, añade la variable de sesión al final de la URL:
+   ```
+   https://10.199.9.184/MDCDWESProyectoTema4/index.php?XDEBUG_SESSION_START=NetBeans
+   ```
+4. La ejecución se parará en el breakpoint y se habilitarán los paneles inferiores **Variables**, **Call Stack** y **Breakpoints**, donde se pueden inspeccionar los datos.
+5. Controles de la depuración:
+   * **Step Over (`F8`):** Ejecuta la línea actual sin entrar en las funciones.
+   * **Step Into (`F7`):** Entra dentro de la función de la línea actual.
+   * **Step Out (`Ctrl + F7`):** Sale de la función actual.
+   * **Continue (`F5`):** Continúa hasta el siguiente breakpoint.
+   * **Finish Debugger Session (`Shift + F5`):** Termina la depuración.
+
+#### 5.5.5 Solución de problemas
+
+* **Se queda en "Waiting For Connection":** Revisa que la regla del puerto `9003` está en el Firewall de Windows y que el *Session ID* coincide con el `xdebug.idekey` del servidor. En el servidor se puede ver la causa con `sudo tail -f /var/log/xdebug.log`.
+* **Error `Socket Exception occurred`:** Hay expresiones antiguas en **Window > Debugging > Watches** que no se pueden resolver, o el puerto `9003` está ocupado por un proceso `java.exe` colgado. Vacía la pestaña *Watches*, cierra NetBeans y finaliza cualquier proceso Java residual desde el Administrador de tareas antes de volver a intentarlo.
+* **Los breakpoints aparecen en gris o con un signo de exclamación:** El archivo que se ejecuta en el servidor no coincide con el archivo local. Revisa el **Path Mapping** (apartado 5.5.3) y que el archivo esté subido al servidor (*On Save*).
+* **Comprobar qué proceso usa el puerto 9003** (en CMD o PowerShell):
+  ```
+  netstat -ano | findstr 9003
+  ```
 
 ## 6. Visual Studio Code
 
@@ -336,6 +411,6 @@ Si quieres traer un proyecto existente:
 * **Gestión de Ramas (Branches):** En la esquina inferior izquierda de la ventana de VS Code verás el nombre de tu rama actual (ej. `main` o `master`). Si haces clic en él, podrás crear nuevas ramas o cambiarte a otra existente fácilmente.
 
 ## Configuraciones Adicionales y Herramientas del IDE pendientes
-* Depuración (Tanto en Netbeans como en Visual Studio).
+* Depuración en Visual Studio Code (la de NetBeans está en el apartado 5.5).
 * Prueba (Configuración de la ejecución para probar el desarrollo).
 * PHP Doc.

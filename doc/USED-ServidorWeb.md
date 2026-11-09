@@ -32,9 +32,15 @@
     - [6.3. Asistente de Seguridad](#63-asistente-de-seguridad)
   - [7. phpMyAdmin](#7-phpmyadmin)
   - [8. XDebug](#8-xdebug)
+    - [8.1. Instalación de Xdebug](#81-instalación-de-xdebug)
+    - [8.2. Configuración del módulo (xdebug.ini)](#82-configuración-del-módulo-xdebugini)
+    - [8.3. Activación en PHP-FPM y reinicio de servicios](#83-activación-en-php-fpm-y-reinicio-de-servicios)
+    - [8.4. Comprobación](#84-comprobación)
+    - [8.5. Cortafuegos y log de Xdebug](#85-cortafuegos-y-log-de-xdebug)
   - [9. Sitios Virtuales y DirectoryIndex](#9-sitios-virtuales-y-directoryindex)
   - [10. SFTP (Usuarios Enjaulados)](#10-sftp-usuarios-enjaulados)
   - [11. Herramientas de Desarrollo (phpDocumentor)](#11-herramientas-de-desarrollo-phpdocumentor)
+  - [12. Puertos de Escucha de los Servicios](#12-puertos-de-escucha-de-los-servicios)
 
 ---
 
@@ -408,11 +414,145 @@ Configuramos el acceso en Apache creando un enlace simbólico:
 
 ## 8. XDebug
 
+Xdebug 3 es una extensión de PHP que permite depurar el código paso a paso (breakpoints, inspección de variables, pila de llamadas) desde el IDE del cliente de desarrollo (NetBeans).
+
+La conexión de depuración funciona **al revés** de lo habitual: el navegador hace la petición HTTP al servidor y es el **servidor (Xdebug)** quien abre la conexión DBGP hacia el **cliente (NetBeans)**, que está escuchando en el puerto `9003`.
+
+    ┌──────────────────────────────┐     1. Petición HTTP/HTTPS     ┌──────────────────────────────┐
+    │   W11ED (Cliente Windows)    │ ─────────────────────────────> │       MDC-USED (Ubuntu)      │
+    │  Firefox + NetBeans (9003)   │                                │  Apache2 + PHP-FPM 8.5       │
+    │                              │ <───────────────────────────── │  Xdebug 3                    │
+    └──────────────────────────────┘   2. Conexión Xdebug (DBGP)    └──────────────────────────────┘
+                                          al puerto 9003 del cliente
+
+*La configuración de la parte del cliente (NetBeans, firewall de Windows y mapeo de rutas) está en la documentación del Cliente de Desarrollo, apartado **5.5 Depuración**.*
+
+### 8.1. Instalación de Xdebug
+
+Instalamos el paquete de Xdebug para nuestra versión de PHP:
+
+    sudo apt update
+    sudo apt install php8.5-xdebug -y
+
+*Si el paquete `php8.5-xdebug` no estuviera disponible en los repositorios, se puede compilar con PECL:*
+
+    sudo apt install php8.5-dev php-pear -y
+    sudo pecl install xdebug
+
+### 8.2. Configuración del módulo (xdebug.ini)
+
+En Ubuntu con PHP-FPM, la configuración del módulo está en la carpeta `mods-available`. Hacemos copia de seguridad y editamos:
+
+    cd /etc/php/8.5/mods-available/
+    sudo cp xdebug.ini xdebug.ini.bk2026
+    sudo nano xdebug.ini
+
+Dejamos el contenido del fichero así:
+
+    [xdebug]
+    zend_extension=xdebug.so
+    xdebug.mode=debug
+    xdebug.start_with_request=yes
+    xdebug.discover_client_host=true
+    xdebug.client_port=9003
+    xdebug.idekey=NetBeans
+    xdebug.log=/var/log/xdebug.log
+
+**Explicación de las directivas:**
+*   `zend_extension=xdebug.so`: Carga la extensión Xdebug en PHP.
+*   `xdebug.mode=debug`: Activa el modo de depuración paso a paso (breakpoints, trazado).
+*   `xdebug.start_with_request=yes`: Inicia la depuración en todas las peticiones, sin tener que añadir nada a la URL.
+*   `xdebug.discover_client_host=true`: Xdebug detecta automáticamente la IP del cliente que ha hecho la petición HTTP y le devuelve la conexión de depuración. Así funciona igual en clase y en casa sin cambiar la IP.
+*   `xdebug.client_port=9003`: Puerto del cliente donde escucha NetBeans (es el puerto por defecto de Xdebug 3; Xdebug 2 usaba el `9000`).
+*   `xdebug.idekey=NetBeans`: Identificador de la sesión. **Debe coincidir** con el *Session ID* configurado en NetBeans.
+*   `xdebug.log=/var/log/xdebug.log`: Fichero de log, muy útil cuando la conexión no funciona.
+
+*Nota: no usamos `/tmp/xdebug.log` porque el servicio `php8.5-fpm` tiene su propia carpeta `/tmp` privada (`PrivateTmp`) y el log no aparecería en el `/tmp` normal.*
+
+Creamos el fichero de log y se lo damos al usuario con el que se ejecuta PHP-FPM (`www-data`):
+
+    sudo touch /var/log/xdebug.log
+    sudo chown www-data:www-data /var/log/xdebug.log
+
+### 8.3. Activación en PHP-FPM y reinicio de servicios
+
+Habilitamos el módulo para la SAPI de FPM y reiniciamos los servicios:
+
+    sudo phpenmod -v 8.5 -s fpm xdebug
+    sudo systemctl restart php8.5-fpm
+    sudo systemctl restart apache2
+
+### 8.4. Comprobación
+
+Comprobamos que PHP-FPM ha cargado la extensión:
+
+    php-fpm8.5 -m | grep -i xdebug
+
+Para verlo también desde el navegador, creamos (con el `operadorweb`) un fichero de prueba:
+
+    nano /var/www/html/xdebuginfo.php
+
+Con el siguiente contenido:
+
+    <?php
+    xdebug_info();
+
+Accedemos a `https://10.199.9.184/xdebuginfo.php` y comprobamos que aparece **Step Debugger: ✔ enabled** y los valores configurados (`client_port 9003`, `idekey NetBeans`...). **Borramos el fichero después** para no dejar información del servidor a la vista:
+
+    rm /var/www/html/xdebuginfo.php
+
+### 8.5. Cortafuegos y log de Xdebug
+
+**Cortafuegos:** En el servidor **no hace falta abrir ningún puerto en UFW**, ya que la conexión de Xdebug es de **salida** (del servidor hacia el puerto `9003` del cliente) y UFW permite las conexiones salientes por defecto. La regla que sí es necesaria es la de **entrada** en el Firewall de Windows del cliente (ver Cliente de Desarrollo, apartado 5.5).
+
+**Log:** Si NetBeans se queda en *"Waiting For Connection"*, revisamos en tiempo real el log mientras recargamos la página en el navegador:
+
+    sudo tail -f /var/log/xdebug.log
+
+*   `Connecting to configured address/port: ...` seguido de `Could not connect`: el Firewall de Windows está bloqueando el puerto `9003` o NetBeans no está escuchando.
+*   No aparece nada: la extensión no se ha cargado (revisar el apartado 8.4).
+
 ## 9. Sitios Virtuales y DirectoryIndex
 
 ## 10. SFTP (Usuarios Enjaulados)
 
 ## 11. Herramientas de Desarrollo (phpDocumentor)
+
+## 12. Puertos de Escucha de los Servicios
+
+Resumen de todos los puertos que utilizan los servicios instalados en `MDC-USED`:
+
+| Servicio | Puerto | Protocolo | Sentido | Regla UFW | Observaciones |
+|---|---|---|---|---|---|
+| SSH (OpenSSH) | `22` | TCP | Entrada | `sudo ufw allow 22` | Administración remota (`miadmin`) desde CMD o MobaXterm. |
+| SFTP | `22` | TCP | Entrada | (la misma de SSH) | Va sobre SSH. Lo usan NetBeans, VS Code y MobaXterm con `operadorweb`. |
+| Apache2 HTTP | `80` | TCP | Entrada | `sudo ufw allow 80` | Redirige a HTTPS mediante el `.htaccess` (apartado 3.5). |
+| Apache2 HTTPS | `443` | TCP | Entrada | `sudo ufw allow 443` | Sitio seguro `default-ssl.conf` con certificado autofirmado. |
+| phpMyAdmin | `80` / `443` | TCP | Entrada | (las de Apache) | No tiene puerto propio, se sirve desde Apache en `/phpmyadmin`. |
+| MariaDB | `3306` | TCP | Entrada | `sudo ufw allow 3306` | Escucha en todas las interfaces (`bind-address = 0.0.0.0`). |
+| PHP-FPM 8.5 | — | Socket Unix | Local | No necesaria | No usa puerto TCP: Apache le pasa las peticiones por `/run/php/php8.5-fpm.sock`. |
+| Xdebug 3 | `9003` | TCP | **Salida** (servidor → cliente) | No necesaria | El que escucha es **NetBeans en el cliente**. Se abre en el Firewall de Windows. |
+| ClamAV (clamd) | — | Socket Unix | Local | No necesaria | Socket `/var/run/clamav/clamd.ctl`. |
+| ClamAV (freshclam) | `443` | TCP | Salida | No necesaria | Descarga de firmas de virus desde Internet. |
+| DNS (systemd-resolved) | `53` | UDP/TCP | Local / Salida | No necesaria | Escucha solo en `127.0.0.53`; consulta a los DNS del Netplan. |
+
+**Comprobaciones:**
+
+Ver todos los puertos TCP/UDP en escucha y qué proceso los usa:
+
+    sudo ss -tulpn
+
+Ver el socket de PHP-FPM:
+
+    sudo ss -xlp | grep php
+
+Ver las reglas activas del cortafuegos:
+
+    sudo ufw status numbered
+
+Desde el cliente Windows (PowerShell) se puede comprobar si un puerto del servidor está accesible:
+
+    Test-NetConnection 10.199.9.184 -Port 3306
 
 
 Autor: Moises Dominguez Cruz
