@@ -9,38 +9,44 @@
   - [Índice de Contenidos](#índice-de-contenidos)
   - [1. Configuración Inicial](#1-configuración-inicial)
     - [1.1. Preparación e Instalación del SO](#11-preparación-e-instalación-del-so)
-    - [1.2. Configuración de Red y Cambio de nombre](#12-configuración-de-red-y-cambio-de-nombre)
-    - [1.3. Actualización, Fecha, SSH, Firewall y Antivirus](#13-actualización-fecha-ssh-firewall-y-antivirus)
-    - [1.4. Comprobación del Sistema y Conexión](#14-comprobación-del-sistema-y-conexión)
+    - [1.2. Configuración de Red y Cambio de Nombre](#12-configuración-de-red-y-cambio-de-nombre)
+    - [1.3. Actualización, Fecha y Antivirus](#13-actualización-fecha-y-antivirus)
+    - [1.4. Comprobación del Sistema](#14-comprobación-del-sistema)
   - [2. Cuentas de Administración](#2-cuentas-de-administración)
     - [2.1. Cuentas Administradoras (`miadmin`, `miadmin2`)](#21-cuentas-administradoras-miadmin-miadmin2)
-  - [3. Apache2 (Servidor Web)](#3-apache2-servidor-web)
-    - [3.1. Instalación y Configuración Básica](#31-instalación-y-configuración-básica)
-    - [3.2. Redirección ErrorLog y ErrorDocument (404)](#32-redirección-errorlog-y-errordocument-404)
-    - [3.3. Habilitar .htaccess (AllowOverride)](#33-habilitar-htaccess-allowoverride)
-    - [3.4. Configuración HTTPS (Certificado SSL MDC)](#34-configuración-https-certificado-ssl-mdc)
-    - [3.5. Redirección de HTTP a HTTPS](#35-redirección-de-http-a-https)
-  - [4. Cuenta de Desarrollo (Operador Web)](#4-cuenta-de-desarrollo-operador-web)
-    - [4.1. Creación del Usuario y Permisos Web](#41-creación-del-usuario-y-permisos-web)
-  - [5. Ejecución PHP con PHP-FPM](#5-ejecución-php-con-php-fpm)
-    - [5.1. Instalación de PHP-FPM](#51-instalación-de-php-fpm)
-    - [5.2. Integración de PHP-FPM con Apache2](#52-integración-de-php-fpm-con-apache2)
-    - [5.3. Configuración de php.ini para Desarrollo](#53-configuración-de-phpini-para-desarrollo)
-  - [6. MariaDB (Servidor de Base de Datos)](#6-mariadb-servidor-de-base-de-datos)
-    - [6.1. Instalación y Acceso Remoto](#61-instalación-y-acceso-remoto)
-    - [6.2. Creación de Usuario Administrador](#62-creación-de-usuario-administrador)
-    - [6.3. Asistente de Seguridad](#63-asistente-de-seguridad)
-  - [7. phpMyAdmin](#7-phpmyadmin)
-  - [8. XDebug](#8-xdebug)
-    - [8.1. Instalación de Xdebug](#81-instalación-de-xdebug)
-    - [8.2. Configuración del módulo (xdebug.ini)](#82-configuración-del-módulo-xdebugini)
-    - [8.3. Activación en PHP-FPM y reinicio de servicios](#83-activación-en-php-fpm-y-reinicio-de-servicios)
-    - [8.4. Comprobación](#84-comprobación)
-    - [8.5. Cortafuegos y log de Xdebug](#85-cortafuegos-y-log-de-xdebug)
-  - [9. Sitios Virtuales y DirectoryIndex](#9-sitios-virtuales-y-directoryindex)
-  - [10. SFTP (Usuarios Enjaulados)](#10-sftp-usuarios-enjaulados)
-  - [11. Herramientas de Desarrollo (phpDocumentor)](#11-herramientas-de-desarrollo-phpdocumentor)
-  - [12. Puertos de Escucha de los Servicios](#12-puertos-de-escucha-de-los-servicios)
+  - [3. SSH (OpenSSH)](#3-ssh-openssh)
+    - [3.1. Comprobación del Servicio](#31-comprobación-del-servicio)
+    - [3.2. Conexión desde el Cliente](#32-conexión-desde-el-cliente)
+  - [4. UFW (Cortafuegos)](#4-ufw-cortafuegos)
+    - [4.1. Activación y Regla de SSH](#41-activación-y-regla-de-ssh)
+    - [4.2. Puertos de Escucha de los Servicios](#42-puertos-de-escucha-de-los-servicios)
+    - [4.3. Comprobaciones](#43-comprobaciones)
+  - [5. Apache2 (Servidor Web)](#5-apache2-servidor-web)
+    - [5.1. Instalación y Configuración Básica](#51-instalación-y-configuración-básica)
+    - [5.2. Redirección ErrorLog y ErrorDocument (404)](#52-redirección-errorlog-y-errordocument-404)
+    - [5.3. Habilitar .htaccess (AllowOverride)](#53-habilitar-htaccess-allowoverride)
+    - [5.4. Configuración HTTPS (Certificado SSL MDC)](#54-configuración-https-certificado-ssl-mdc)
+    - [5.5. Redirección de HTTP a HTTPS](#55-redirección-de-http-a-https)
+  - [6. Cuenta de Desarrollo (Operador Web)](#6-cuenta-de-desarrollo-operador-web)
+    - [6.1. Creación del Usuario y Permisos Web](#61-creación-del-usuario-y-permisos-web)
+  - [7. Ejecución PHP con PHP-FPM](#7-ejecución-php-con-php-fpm)
+    - [7.1. Instalación de PHP-FPM](#71-instalación-de-php-fpm)
+    - [7.2. Integración de PHP-FPM con Apache2](#72-integración-de-php-fpm-con-apache2)
+    - [7.3. Configuración de php.ini para Desarrollo](#73-configuración-de-phpini-para-desarrollo)
+    - [7.4. Módulo Xdebug](#74-módulo-xdebug)
+      - [7.4.1. Instalación de Xdebug](#741-instalación-de-xdebug)
+      - [7.4.2. Configuración del módulo (xdebug.ini)](#742-configuración-del-módulo-xdebugini)
+      - [7.4.3. Activación en PHP-FPM y reinicio de servicios](#743-activación-en-php-fpm-y-reinicio-de-servicios)
+      - [7.4.4. Comprobación](#744-comprobación)
+      - [7.4.5. Cortafuegos y log de Xdebug](#745-cortafuegos-y-log-de-xdebug)
+  - [8. MariaDB (Servidor de Base de Datos)](#8-mariadb-servidor-de-base-de-datos)
+    - [8.1. Instalación y Acceso Remoto](#81-instalación-y-acceso-remoto)
+    - [8.2. Creación de Usuario Administrador](#82-creación-de-usuario-administrador)
+    - [8.3. Asistente de Seguridad](#83-asistente-de-seguridad)
+  - [9. phpMyAdmin](#9-phpmyadmin)
+  - [10. Sitios Virtuales y DirectoryIndex](#10-sitios-virtuales-y-directoryindex)
+  - [11. SFTP (Usuarios Enjaulados)](#11-sftp-usuarios-enjaulados)
+  - [12. Herramientas de Desarrollo (phpDocumentor)](#12-herramientas-de-desarrollo-phpdocumentor)
 
 ---
 
@@ -109,7 +115,7 @@ Para configurar la red estática editamos Netplan:
                 via: 192.168.1.1
       version: 2
 
-Aplica los cambios de la red elegida: 
+Aplica los cambios de la red elegida:
 
     sudo netplan apply
 
@@ -119,18 +125,13 @@ Para comprobar la red y DNS:
     ip r
     resolvectl status
 
-### 1.3. Actualización, Fecha, SSH, Firewall y Antivirus
+### 1.3. Actualización, Fecha y Antivirus
 
 Actualización del sistema y configuración de zona horaria:
 
     sudo apt update && sudo apt upgrade -y
     date
     sudo timedatectl set-timezone Europe/Madrid
-
-Habilitar Cortafuegos y puertos básicos (SSH):
-
-    sudo ufw enable
-    sudo ufw allow 22
 
 Instalar y actualizar Antivirus ClamAV:
 
@@ -140,12 +141,13 @@ Instalar y actualizar Antivirus ClamAV:
     sudo systemctl start clamav-freshclam
     sudo systemctl enable clamav-freshclam
 
-### 1.4. Comprobación del Sistema y Conexión
+### 1.4. Comprobación del Sistema
 
-Desde el terminal (CMD) de tu máquina anfitriona, haz ping y conéctate:
+Desde el terminal (CMD) de tu máquina anfitriona, comprueba que el servidor responde:
 
     ping 10.199.9.184
-    ssh miadmin@10.199.9.184
+
+*La conexión remota por SSH se explica en el apartado [3. SSH (OpenSSH)](#3-ssh-openssh).*
 
 ---
 
@@ -165,9 +167,76 @@ Comprobar pertenencia a grupos:
 
 ---
 
-## 3. Apache2 (Servidor Web)
+## 3. SSH (OpenSSH)
 
-### 3.1. Instalación y Configuración Básica
+### 3.1. Comprobación del Servicio
+
+Comprobamos que el servidor SSH está activo:
+
+    sudo systemctl status ssh
+
+*La regla del cortafuegos para el puerto `22` se añade en el apartado [4.1](#41-activación-y-regla-de-ssh).*
+
+### 3.2. Conexión desde el Cliente
+
+Desde el terminal (CMD) o MobaXterm de tu máquina anfitriona:
+
+    ssh miadmin@10.199.9.184
+
+---
+
+## 4. UFW (Cortafuegos)
+
+### 4.1. Activación y Regla de SSH
+
+Permitimos primero el puerto de SSH y después habilitamos el cortafuegos (en este orden, para no perder la conexión si estamos trabajando por SSH):
+
+    sudo ufw allow 22
+    sudo ufw enable
+
+El resto de reglas se añaden al instalar cada servicio (Apache2 en el apartado 5, MariaDB en el apartado 8). En la tabla del apartado 4.2 aparece el resumen completo.
+
+### 4.2. Puertos de Escucha de los Servicios
+
+Resumen de todos los puertos que utilizan los servicios instalados en `MDC-USED`:
+
+| Servicio | Puerto | Protocolo | Sentido | Regla UFW | Observaciones |
+|---|---|---|---|---|---|
+| SSH (OpenSSH) | `22` | TCP | Entrada | `sudo ufw allow 22` | Administración remota (`miadmin`) desde CMD o MobaXterm. |
+| SFTP | `22` | TCP | Entrada | (la misma de SSH) | Va sobre SSH. Lo usan NetBeans, VS Code y MobaXterm con `operadorweb`. |
+| Apache2 HTTP | `80` | TCP | Entrada | `sudo ufw allow 80` | Redirige a HTTPS mediante el `.htaccess` (apartado 5.5). |
+| Apache2 HTTPS | `443` | TCP | Entrada | `sudo ufw allow 443` | Sitio seguro `default-ssl.conf` con certificado autofirmado. |
+| phpMyAdmin | `80` / `443` | TCP | Entrada | (las de Apache) | No tiene puerto propio, se sirve desde Apache en `/phpmyadmin`. |
+| MariaDB | `3306` | TCP | Entrada | `sudo ufw allow 3306` | Escucha en todas las interfaces (`bind-address = 0.0.0.0`). |
+| PHP-FPM 8.5 | — | Socket Unix | Local | No necesaria | No usa puerto TCP: Apache le pasa las peticiones por `/run/php/php8.5-fpm.sock`. |
+| Xdebug 3 | `9003` | TCP | **Salida** (servidor → cliente) | No necesaria | El que escucha es **NetBeans en el cliente**. Se abre en el Firewall de Windows. |
+| ClamAV (clamd) | — | Socket Unix | Local | No necesaria | Socket `/var/run/clamav/clamd.ctl`. |
+| ClamAV (freshclam) | `443` | TCP | Salida | No necesaria | Descarga de firmas de virus desde Internet. |
+| DNS (systemd-resolved) | `53` | UDP/TCP | Local / Salida | No necesaria | Escucha solo en `127.0.0.53`; consulta a los DNS del Netplan. |
+
+### 4.3. Comprobaciones
+
+Ver las reglas activas del cortafuegos:
+
+    sudo ufw status numbered
+
+Ver todos los puertos TCP/UDP en escucha y qué proceso los usa:
+
+    sudo ss -tulpn
+
+Ver el socket de PHP-FPM:
+
+    sudo ss -xlp | grep php
+
+Desde el cliente Windows (PowerShell) se puede comprobar si un puerto del servidor está accesible:
+
+    Test-NetConnection 10.199.9.184 -Port 3306
+
+---
+
+## 5. Apache2 (Servidor Web)
+
+### 5.1. Instalación y Configuración Básica
 
 Instalación de Apache y apertura del puerto 80:
 
@@ -176,7 +245,7 @@ Instalación de Apache y apertura del puerto 80:
     sudo ufw allow 80
     sudo systemctl status apache2
 
-### 3.2. Redirección ErrorLog y ErrorDocument (404)
+### 5.2. Redirección ErrorLog y ErrorDocument (404)
 
 Creamos un directorio para los errores en la raíz web:
 
@@ -194,11 +263,11 @@ Dentro de `<VirtualHost *:80>`, añade o modifica:
     ErrorLog /var/www/html/error/error.log
     ErrorDocument 404 /error/404.html
 
-### 3.3. Habilitar (AllowOverride)
+### 5.3. Habilitar .htaccess (AllowOverride)
 
-Usar el comando `sudo a2enmod rewrite` para activar el modulo de rewrite   
+Usar el comando `sudo a2enmod rewrite` para activar el modulo de rewrite
 
-Entrar al archivo de configuracion usando `sudo nano /etc/apache2/apache2.conf`  
+Entrar al archivo de configuracion usando `sudo nano /etc/apache2/apache2.conf`
 
 **Modificar el valor de AllowOverride en el archivo:**
 ```bash
@@ -216,7 +285,7 @@ Recarga del servicio: `sudo systemctl reload apache2`
 
 Reinicio del servicio: `sudo systemctl restart apache2`
 
-### 3.4. Configuración HTTPS (Certificado SSL MDC)
+### 5.4. Configuración HTTPS (Certificado SSL MDC)
 
 Generar un certificado SSL almacena información básica sobre un sitio y lo acompaña de un archivo de claves para manejar datos cifrados de forma segura. Generaremos la clave privada y el CSR (Certificate Signing Request) que garantiza la integridad y autenticación.
 
@@ -262,7 +331,7 @@ Activación del sitio virtual seguro:
 
 Comprobación desde el navegador estableciendo una conexión segura: `https://10.199.9.184`.
 
-### 3.5. Redirección de HTTP a HTTPS
+### 5.5. Redirección de HTTP a HTTPS
 
 Para activar este servicio se tiene que hacer con el operadorweb desde el CMD o MobaXterm.
 
@@ -289,9 +358,9 @@ Reinicia y testea:
 
 ---
 
-## 4. Cuenta de Desarrollo (Operador Web)
+## 6. Cuenta de Desarrollo (Operador Web)
 
-### 4.1. Creación del Usuario y Permisos Web
+### 6.1. Creación del Usuario y Permisos Web
 
 Creamos el usuario `operadorweb` forzando que su home sea la raíz web y asignándolo al grupo `www-data`:
 
@@ -305,15 +374,15 @@ Le asignamos la propiedad del directorio y permisos:
 
 ---
 
-## 5. PHP-FPM
+## 7. Ejecución PHP con PHP-FPM
 
-### 5.1. Instalación de PHP-FPM
+### 7.1. Instalación de PHP-FPM
 
 Instalación del servicio:
 
     sudo apt install php8.5-fpm -y
 
-### 5.2. Integración de PHP-FPM con Apache2
+### 7.2. Integración de PHP-FPM con Apache2
 
 Configurar Apache2 con php8.5-fpm:
 
@@ -328,7 +397,7 @@ Reiniciar ambos servicios para aplicar los cambios:
     sudo systemctl restart php8.5-fpm
     sudo systemctl restart apache2
 
-### 5.3. Configuración de php.ini para Desarrollo
+### 7.3. Configuración de php.ini para Desarrollo
 
 Hacer copia de seguridad y editar:
 
@@ -348,71 +417,11 @@ Modifica las siguientes directivas para tu entorno de desarrollo:
     log_errors = On
     error_log = /var/log/php_errors.log
 
-Aplica los cambios: 
-    
+Aplica los cambios:
+
     sudo systemctl restart php8.5-fpm.service
 
----
-
-## 6. MariaDB (Servidor de Base de Datos)
-
-### 6.1. Instalación y Acceso Remoto
-
-Instalación:
-
-    sudo apt install mariadb-server -y
-
-Para permitir conexiones remotas:
-
-    sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
-
-Cambia `bind-address = 127.0.0.1` a `bind-address = 0.0.0.0` y reinicia:
-
-    sudo systemctl restart mariadb
-    sudo ufw allow 3306
-
-### 6.2. Creación de Usuario Administrador
-
-Crearemos tu usuario `adminsql` ya que root funciona por *unix_socket*:
-
-    sudo mariadb
-
-Dentro de SQL ejecuta:
-
-    CREATE USER 'adminsql'@'%' IDENTIFIED BY 'paso';
-    GRANT ALL PRIVILEGES ON *.* TO 'adminsql'@'%' WITH GRANT OPTION;
-    FLUSH PRIVILEGES;
-    EXIT;
-
-### 6.3. Asistente de Seguridad
-
-Asegura el servidor ejecutando este script y siguiendo las instrucciones en pantalla:
-
-    sudo mariadb-secure-installation
-
----
-
-## 7. phpMyAdmin
-
-Antes de instalar, vemos qué módulos tenemos para compararlos después:
-
-    php -m > /home/miadmin/listadomodulos.txt
-
-Instalamos, seleccionamos *Apache* y confirmamos la base de datos `dbconfig-common`:
-
-    sudo apt install phpmyadmin -y
-    php -m > /home/miadmin/listadomodulos2.txt
-    diff /home/miadmin/listadomodulos.txt /home/miadmin/listadomodulos2.txt
-
-Configuramos el acceso en Apache creando un enlace simbólico:
-
-    sudo ln -sf /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
-    sudo a2enconf phpmyadmin
-    sudo systemctl restart apache2
-
----
-
-## 8. XDebug
+### 7.4. Módulo Xdebug
 
 Xdebug 3 es una extensión de PHP que permite depurar el código paso a paso (breakpoints, inspección de variables, pila de llamadas) desde el IDE del cliente de desarrollo (NetBeans).
 
@@ -427,7 +436,7 @@ La conexión de depuración funciona **al revés** de lo habitual: el navegador 
 
 *La configuración de la parte del cliente (NetBeans, firewall de Windows y mapeo de rutas) está en la documentación del Cliente de Desarrollo, apartado **5.5 Depuración**.*
 
-### 8.1. Instalación de Xdebug
+#### 7.4.1. Instalación de Xdebug
 
 Instalamos el paquete de Xdebug para nuestra versión de PHP:
 
@@ -439,7 +448,7 @@ Instalamos el paquete de Xdebug para nuestra versión de PHP:
     sudo apt install php8.5-dev php-pear -y
     sudo pecl install xdebug
 
-### 8.2. Configuración del módulo (xdebug.ini)
+#### 7.4.2. Configuración del módulo (xdebug.ini)
 
 En Ubuntu con PHP-FPM, la configuración del módulo está en la carpeta `mods-available`. Hacemos copia de seguridad y editamos:
 
@@ -474,7 +483,7 @@ Creamos el fichero de log y se lo damos al usuario con el que se ejecuta PHP-FPM
     sudo touch /var/log/xdebug.log
     sudo chown www-data:www-data /var/log/xdebug.log
 
-### 8.3. Activación en PHP-FPM y reinicio de servicios
+#### 7.4.3. Activación en PHP-FPM y reinicio de servicios
 
 Habilitamos el módulo para la SAPI de FPM y reiniciamos los servicios:
 
@@ -482,7 +491,7 @@ Habilitamos el módulo para la SAPI de FPM y reiniciamos los servicios:
     sudo systemctl restart php8.5-fpm
     sudo systemctl restart apache2
 
-### 8.4. Comprobación
+#### 7.4.4. Comprobación
 
 Comprobamos que PHP-FPM ha cargado la extensión:
 
@@ -501,58 +510,83 @@ Accedemos a `https://10.199.9.184/xdebuginfo.php` y comprobamos que aparece **St
 
     rm /var/www/html/xdebuginfo.php
 
-### 8.5. Cortafuegos y log de Xdebug
+#### 7.4.5. Cortafuegos y log de Xdebug
 
-**Cortafuegos:** En el servidor **no hace falta abrir ningún puerto en UFW**, ya que la conexión de Xdebug es de **salida** (del servidor hacia el puerto `9003` del cliente) y UFW permite las conexiones salientes por defecto. La regla que sí es necesaria es la de **entrada** en el Firewall de Windows del cliente (ver Cliente de Desarrollo, apartado 5.5).
+**Cortafuegos:** En el servidor **no hace falta abrir ningún puerto en UFW**, ya que la conexión de Xdebug es de **salida** (del servidor hacia el puerto `9003` del cliente) y UFW permite las conexiones salientes por defecto (ver tabla del apartado 4.2). La regla que sí es necesaria es la de **entrada** en el Firewall de Windows del cliente (ver Cliente de Desarrollo, apartado 5.5).
 
 **Log:** Si NetBeans se queda en *"Waiting For Connection"*, revisamos en tiempo real el log mientras recargamos la página en el navegador:
 
     sudo tail -f /var/log/xdebug.log
 
 *   `Connecting to configured address/port: ...` seguido de `Could not connect`: el Firewall de Windows está bloqueando el puerto `9003` o NetBeans no está escuchando.
-*   No aparece nada: la extensión no se ha cargado (revisar el apartado 8.4).
+*   No aparece nada: la extensión no se ha cargado (revisar el apartado 7.4.4).
 
-## 9. Sitios Virtuales y DirectoryIndex
+---
 
-## 10. SFTP (Usuarios Enjaulados)
+## 8. MariaDB (Servidor de Base de Datos)
 
-## 11. Herramientas de Desarrollo (phpDocumentor)
+### 8.1. Instalación y Acceso Remoto
 
-## 12. Puertos de Escucha de los Servicios
+Instalación:
 
-Resumen de todos los puertos que utilizan los servicios instalados en `MDC-USED`:
+    sudo apt install mariadb-server -y
 
-| Servicio | Puerto | Protocolo | Sentido | Regla UFW | Observaciones |
-|---|---|---|---|---|---|
-| SSH (OpenSSH) | `22` | TCP | Entrada | `sudo ufw allow 22` | Administración remota (`miadmin`) desde CMD o MobaXterm. |
-| SFTP | `22` | TCP | Entrada | (la misma de SSH) | Va sobre SSH. Lo usan NetBeans, VS Code y MobaXterm con `operadorweb`. |
-| Apache2 HTTP | `80` | TCP | Entrada | `sudo ufw allow 80` | Redirige a HTTPS mediante el `.htaccess` (apartado 3.5). |
-| Apache2 HTTPS | `443` | TCP | Entrada | `sudo ufw allow 443` | Sitio seguro `default-ssl.conf` con certificado autofirmado. |
-| phpMyAdmin | `80` / `443` | TCP | Entrada | (las de Apache) | No tiene puerto propio, se sirve desde Apache en `/phpmyadmin`. |
-| MariaDB | `3306` | TCP | Entrada | `sudo ufw allow 3306` | Escucha en todas las interfaces (`bind-address = 0.0.0.0`). |
-| PHP-FPM 8.5 | — | Socket Unix | Local | No necesaria | No usa puerto TCP: Apache le pasa las peticiones por `/run/php/php8.5-fpm.sock`. |
-| Xdebug 3 | `9003` | TCP | **Salida** (servidor → cliente) | No necesaria | El que escucha es **NetBeans en el cliente**. Se abre en el Firewall de Windows. |
-| ClamAV (clamd) | — | Socket Unix | Local | No necesaria | Socket `/var/run/clamav/clamd.ctl`. |
-| ClamAV (freshclam) | `443` | TCP | Salida | No necesaria | Descarga de firmas de virus desde Internet. |
-| DNS (systemd-resolved) | `53` | UDP/TCP | Local / Salida | No necesaria | Escucha solo en `127.0.0.53`; consulta a los DNS del Netplan. |
+Para permitir conexiones remotas:
 
-**Comprobaciones:**
+    sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
 
-Ver todos los puertos TCP/UDP en escucha y qué proceso los usa:
+Cambia `bind-address = 127.0.0.1` a `bind-address = 0.0.0.0` y reinicia:
 
-    sudo ss -tulpn
+    sudo systemctl restart mariadb
+    sudo ufw allow 3306
 
-Ver el socket de PHP-FPM:
+### 8.2. Creación de Usuario Administrador
 
-    sudo ss -xlp | grep php
+Crearemos tu usuario `adminsql` ya que root funciona por *unix_socket*:
 
-Ver las reglas activas del cortafuegos:
+    sudo mariadb
 
-    sudo ufw status numbered
+Dentro de SQL ejecuta:
 
-Desde el cliente Windows (PowerShell) se puede comprobar si un puerto del servidor está accesible:
+    CREATE USER 'adminsql'@'%' IDENTIFIED BY 'paso';
+    GRANT ALL PRIVILEGES ON *.* TO 'adminsql'@'%' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+    EXIT;
 
-    Test-NetConnection 10.199.9.184 -Port 3306
+### 8.3. Asistente de Seguridad
 
+Asegura el servidor ejecutando este script y siguiendo las instrucciones en pantalla:
+
+    sudo mariadb-secure-installation
+
+---
+
+## 9. phpMyAdmin
+
+Antes de instalar, vemos qué módulos tenemos para compararlos después:
+
+    php -m > /home/miadmin/listadomodulos.txt
+
+Instalamos, seleccionamos *Apache* y confirmamos la base de datos `dbconfig-common`:
+
+    sudo apt install phpmyadmin -y
+    php -m > /home/miadmin/listadomodulos2.txt
+    diff /home/miadmin/listadomodulos.txt /home/miadmin/listadomodulos2.txt
+
+Configuramos el acceso en Apache creando un enlace simbólico:
+
+    sudo ln -sf /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
+    sudo a2enconf phpmyadmin
+    sudo systemctl restart apache2
+
+---
+
+## 10. Sitios Virtuales y DirectoryIndex
+
+## 11. SFTP (Usuarios Enjaulados)
+
+## 12. Herramientas de Desarrollo (phpDocumentor)
+
+---
 
 Autor: Moises Dominguez Cruz
