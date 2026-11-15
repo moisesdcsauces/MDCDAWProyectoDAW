@@ -14,9 +14,9 @@
 
 ## Git y GitHub
 
-- [3. Comandos y flujos de trabajo en Git](doc/MDCGIT-COMANDOS.md)
-- [4. Subir un proyecto a GitHub desde cero](doc/MDCGIT-REPOSITORIOS.md)
-- [5. Añadir un subproyecto sin mezclar repositorios](doc/MDCGIT-SUBPROYECTOS.md)
+- [3. Comandos Git](doc/MDCGIT-COMANDOS.md)
+- [4. Subir Proyecto a GitHub](doc/MDCGIT-REPOSITORIOS.md)
+- [5. Solución a añadir subproyecto sin mezclar repositorios en NetBeans](doc/MDCGIT-SUBPROYECTOS.md)
 
 > **Moisés Alberto Domínguez Cruz**  
 > Curso: 2026/2027  
