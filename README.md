@@ -9,8 +9,8 @@
 
 ## Entornos de trabajo
 
-- [1. Servidor Web — Ubuntu Server (USED)](doc/USED-ServidorWeb.md) · [PDF](doc/USED-ServidorWeb.pdf)
-- [2. Cliente de Desarrollo — Windows 11 (W11ED)](doc/W11ED-ClienteDesarrollo.md) · [PDF](doc/W11ED-ClienteDesarrollo.pdf)
+- [1. Servidor Web — Ubuntu Server (USED)](doc/USED-ServidorWeb.md)
+- [2. Cliente de Desarrollo — Windows 11 (W11ED)](doc/W11ED-ClienteDesarrollo.md)
 
 ## Git y GitHub
 
