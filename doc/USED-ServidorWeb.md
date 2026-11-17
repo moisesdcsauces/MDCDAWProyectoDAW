@@ -12,6 +12,7 @@
     - [1.2. Configuración de Red y Cambio de Nombre](#12-configuración-de-red-y-cambio-de-nombre)
     - [1.3. Actualización, Fecha y Antivirus](#13-actualización-fecha-y-antivirus)
     - [1.4. Comprobación del Sistema](#14-comprobación-del-sistema)
+    - [1.5. Cuentas del Servidor Web](#15-cuentas-del-servidor-web)
   - [2. Cuentas de Administración](#2-cuentas-de-administración)
     - [2.1. Cuentas Administradoras (`miadmin`, `miadmin2`)](#21-cuentas-administradoras-miadmin-miadmin2)
   - [3. SSH (OpenSSH)](#3-ssh-openssh)
@@ -27,6 +28,14 @@
     - [5.3. Habilitar .htaccess (AllowOverride)](#53-habilitar-htaccess-allowoverride)
     - [5.4. Configuración HTTPS (Certificado SSL MDC)](#54-configuración-https-certificado-ssl-mdc)
     - [5.5. Redirección de HTTP a HTTPS](#55-redirección-de-http-a-https)
+    - [5.6. Sitios Virtuales y DirectoryIndex](#56-sitios-virtuales-y-directoryindex)
+    - [5.7. SFTP (Usuarios Enjaulados)](#57-sftp-usuarios-enjaulados)
+      - [5.7.1. Copia de seguridad de sshd\_config](#571-copia-de-seguridad-de-sshd_config)
+      - [5.7.2. Grupo sftpusers](#572-grupo-sftpusers)
+      - [5.7.3. Creación del usuario enjaulado](#573-creación-del-usuario-enjaulado)
+      - [5.7.4. Permisos de la jaula y carpeta httpdocs](#574-permisos-de-la-jaula-y-carpeta-httpdocs)
+      - [5.7.5. Configuración de sshd\_config](#575-configuración-de-sshd_config)
+      - [5.7.6. Reinicio y comprobación](#576-reinicio-y-comprobación)
   - [6. Cuenta de Desarrollo (Operador Web)](#6-cuenta-de-desarrollo-operador-web)
     - [6.1. Creación del Usuario y Permisos Web](#61-creación-del-usuario-y-permisos-web)
   - [7. Ejecución PHP con PHP-FPM](#7-ejecución-php-con-php-fpm)
@@ -44,9 +53,7 @@
     - [8.2. Creación de Usuario Administrador](#82-creación-de-usuario-administrador)
     - [8.3. Asistente de Seguridad](#83-asistente-de-seguridad)
   - [9. phpMyAdmin](#9-phpmyadmin)
-  - [10. Sitios Virtuales y DirectoryIndex](#10-sitios-virtuales-y-directoryindex)
-  - [11. SFTP (Usuarios Enjaulados)](#11-sftp-usuarios-enjaulados)
-  - [12. Herramientas de Desarrollo (phpDocumentor)](#12-herramientas-de-desarrollo-phpdocumentor)
+  - [10. Herramientas de Desarrollo (phpDocumentor)](#10-herramientas-de-desarrollo-phpdocumentor)
 
 ---
 
@@ -149,6 +156,30 @@ Desde el terminal (CMD) de tu máquina anfitriona, comprueba que el servidor res
 
 *La conexión remota por SSH se explica en el apartado [3. SSH (OpenSSH)](#3-ssh-openssh).*
 
+### 1.5. Cuentas del Servidor Web
+
+Resumen de todas las cuentas que existen en `MDC-USED` y para qué se usa cada una:
+
+| Cuenta | Tipo | Grupo principal / secundarios | Home / Directorio | Acceso | Uso | Apartado |
+|---|---|---|---|---|---|---|
+| `miadmin` | Sistema | `miadmin` / `sudo`, `adm`... | `/home/miadmin` | SSH | Administrador principal (creado al instalar Ubuntu). | 2.1 |
+| `miadmin2` | Sistema | `miadmin2` / `sudo`, `adm`, `cdrom`, `dip`, `plugdev`, `lxd` | `/home/miadmin2` | SSH | Administrador de respaldo. | 2.1 |
+| `operadorweb` | Sistema | `www-data` | `/var/www/html` | SSH / SFTP | Desarrollo y publicación del sitio principal. | 6.1 |
+| `enjaulado1` | Sistema | `www-data` / `sftpusers` | `/var/www/enjaulado1` (jaula) | Solo SFTP | Publica su web en `httpdocs`, sin salir de su jaula. | 5.7 |
+| `www-data` | Sistema (servicio) | `www-data` | `/var/www` | Sin login | Usuario con el que se ejecutan Apache2 y PHP-FPM. | 5 y 7 |
+| `root` (MariaDB) | Base de datos | — | — | `sudo mariadb` (*unix_socket*) | Administración local de MariaDB. | 8.2 |
+| `adminsql` | Base de datos | — | — | Remoto (`'%'`) y phpMyAdmin | Administrador de MariaDB con todos los privilegios. | 8.2 |
+| `phpmyadmin` | Base de datos | — | — | Local | Creado por `dbconfig-common` para la base de datos interna de phpMyAdmin. | 9 |
+
+Comprobar las cuentas de sistema y sus grupos:
+
+    cat /etc/passwd | grep -E "miadmin|operadorweb|enjaulado"
+    groups operadorweb enjaulado1
+
+Comprobar las cuentas de MariaDB:
+
+    sudo mariadb -e "SELECT User, Host FROM mysql.user;"
+
 ---
 
 ## 2. Cuentas de Administración
@@ -203,7 +234,7 @@ Resumen de todos los puertos que utilizan los servicios instalados en `MDC-USED`
 | Servicio | Puerto | Protocolo | Sentido | Regla UFW | Observaciones |
 |---|---|---|---|---|---|
 | SSH (OpenSSH) | `22` | TCP | Entrada | `sudo ufw allow 22` | Administración remota (`miadmin`) desde CMD o MobaXterm. |
-| SFTP | `22` | TCP | Entrada | (la misma de SSH) | Va sobre SSH. Lo usan NetBeans, VS Code y MobaXterm con `operadorweb`. |
+| SFTP | `22` | TCP | Entrada | (la misma de SSH) | Va sobre SSH. Lo usan NetBeans, VS Code y MobaXterm con `operadorweb` y los usuarios enjaulados (apartado 5.7). |
 | Apache2 HTTP | `80` | TCP | Entrada | `sudo ufw allow 80` | Redirige a HTTPS mediante el `.htaccess` (apartado 5.5). |
 | Apache2 HTTPS | `443` | TCP | Entrada | `sudo ufw allow 443` | Sitio seguro `default-ssl.conf` con certificado autofirmado. |
 | phpMyAdmin | `80` / `443` | TCP | Entrada | (las de Apache) | No tiene puerto propio, se sirve desde Apache en `/phpmyadmin`. |
@@ -355,6 +386,104 @@ Reinicia y testea:
 
     sudo apache2ctl configtest
     sudo systemctl reload apache2
+
+### 5.6. Sitios Virtuales y DirectoryIndex
+
+### 5.7. SFTP (Usuarios Enjaulados)
+
+Un usuario **enjaulado** (*chroot*) solo puede conectarse por SFTP y queda encerrado en su propio directorio (`/var/www/enjaulado1`): no puede subir a la raíz del sistema, ni abrir una shell, ni hacer túneles. Dentro de su jaula tendrá la carpeta `httpdocs`, que es donde sube su web.
+
+Todo el proceso se hace con `miadmin`.
+
+#### 5.7.1. Copia de seguridad de `sshd_config`
+
+Entramos en la carpeta de configuración de SSH y hacemos copia del fichero del servidor:
+
+    cd /etc/ssh
+    ls
+    sudo cp sshd_config sshd_config.bk2026
+
+#### 5.7.2. Grupo `sftpusers`
+
+Creamos el grupo al que pertenecerán todos los usuarios enjaulados y comprobamos que existe:
+
+    sudo groupadd sftpusers
+    cat /etc/group | grep sftp
+
+Resultado esperado: `sftpusers:x:1002:`
+
+#### 5.7.3. Creación del usuario enjaulado
+
+Creamos `enjaulado1` con grupo principal `www-data`, grupo secundario `sftpusers` y su home en `/var/www/enjaulado1`:
+
+    sudo useradd -g www-data -G sftpusers -m -d /var/www/enjaulado1 enjaulado1
+    sudo passwd enjaulado1
+
+*   `-g www-data`: grupo principal, para que Apache pueda leer sus ficheros.
+*   `-G sftpusers`: grupo secundario, es el que activa la jaula en `sshd_config`.
+*   `-m -d /var/www/enjaulado1`: crea el directorio home en esa ruta.
+
+#### 5.7.4. Permisos de la jaula y carpeta `httpdocs`
+
+SSH exige que el directorio de la jaula pertenezca a `root` y que **nadie más pueda escribir en él**; si no, rechaza la conexión:
+
+    sudo chown root:root /var/www/enjaulado1
+    sudo chmod 755 /var/www/enjaulado1
+    ls -l /var/www/enjaulado1
+
+Como el usuario no puede escribir en la raíz de su jaula, le creamos la carpeta `httpdocs`, que sí será suya:
+
+    sudo mkdir /var/www/enjaulado1/httpdocs
+    sudo chmod 2775 -R /var/www/enjaulado1/httpdocs
+    sudo chown enjaulado1:www-data -R /var/www/enjaulado1/httpdocs
+    ls -l /var/www/enjaulado1
+
+Resultado esperado:
+
+    drwxrwsr-x 2 enjaulado1 www-data 4096 Nov 11 08:43 httpdocs
+
+*El `2` de `2775` es el bit **setgid** (la `s` en `rwsr`): todo lo que se cree dentro de `httpdocs` hereda el grupo `www-data`.*
+
+#### 5.7.5. Configuración de `sshd_config`
+
+Editamos el fichero:
+
+    sudo nano /etc/ssh/sshd_config
+
+Comentamos la línea del subsistema SFTP original y añadimos la de `internal-sftp`:
+
+    # Subsystem     sftp    /usr/lib/openssh/sftp-server
+
+    Subsystem sftp internal-sftp
+
+Y **al final del fichero** añadimos el bloque para el grupo `sftpusers`:
+
+    Match Group sftpusers
+    ChrootDirectory %h
+    ForceCommand internal-sftp -u 2
+    AllowTcpForwarding no
+    PermitTunnel no
+    X11Forwarding no
+
+**Explicación de las directivas:**
+*   `Subsystem sftp internal-sftp`: usa el servidor SFTP interno de OpenSSH, que funciona dentro de la jaula sin necesitar binarios ni librerías dentro de ella.
+*   `Match Group sftpusers`: las líneas siguientes solo se aplican a los usuarios de ese grupo. Debe ir al final, porque todo lo que va detrás de un `Match` pertenece a ese bloque.
+*   `ChrootDirectory %h`: encierra al usuario en su home (`%h` = `/var/www/enjaulado1`).
+*   `ForceCommand internal-sftp -u 2`: solo puede usar SFTP (no shell). `-u 2` es la umask `002`, así los ficheros que suba quedan con permisos `664` y las carpetas con `775` (escritura para el grupo `www-data`).
+*   `AllowTcpForwarding no`, `PermitTunnel no`, `X11Forwarding no`: impiden usar la conexión para túneles o reenvío gráfico.
+
+#### 5.7.6. Reinicio y comprobación
+
+Comprobamos la sintaxis del fichero (si no muestra nada, está bien) y reiniciamos SSH:
+
+    sudo sshd -t
+    sudo systemctl restart ssh
+
+Desde el cliente (CMD) nos conectamos con el usuario enjaulado:
+
+    sftp enjaulado1@10.199.9.184
+
+Dentro de la sesión, `pwd` debe mostrar `/` (la raíz de su jaula) y `ls` solo la carpeta `httpdocs`. Si intentamos `ssh enjaulado1@10.199.9.184`, la conexión se cierra porque no tiene permitida la shell.
 
 ---
 
@@ -581,11 +710,7 @@ Configuramos el acceso en Apache creando un enlace simbólico:
 
 ---
 
-## 10. Sitios Virtuales y DirectoryIndex
-
-## 11. SFTP (Usuarios Enjaulados)
-
-## 12. Herramientas de Desarrollo (phpDocumentor)
+## 10. Herramientas de Desarrollo (phpDocumentor)
 
 ---
 
