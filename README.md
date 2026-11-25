@@ -11,12 +11,13 @@
 
 - [1. Servidor Web — Ubuntu Server (USED)](doc/USED-ServidorWeb.md)
 - [2. Cliente de Desarrollo — Windows 11 (W11ED)](doc/W11ED-ClienteDesarrollo.md)
+- [3. Entorno de Explotación — Plesk](doc/PLESK-EntornoExplotacion.md)
 
 ## Git y GitHub
 
-- [3. Comandos Git](doc/MDCGIT-COMANDOS.md)
-- [4. Subir Proyecto a GitHub](doc/MDCGIT-REPOSITORIOS.md)
-- [5. Solución a añadir subproyecto sin mezclar repositorios en NetBeans](doc/MDCGIT-SUBPROYECTOS.md)
+- [4. Comandos Git](doc/MDCGIT-COMANDOS.md)
+- [5. Subir Proyecto a GitHub](doc/MDCGIT-REPOSITORIOS.md)
+- [6. Solución a añadir subproyecto sin mezclar repositorios en NetBeans](doc/MDCGIT-SUBPROYECTOS.md)
 
 > **Moisés Alberto Domínguez Cruz**  
 > Curso: 2026/2027  

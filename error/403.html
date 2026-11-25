@@ -87,10 +87,17 @@
         <h1 class="error__codigo">403</h1>
         <p class="error__titulo">Acceso prohibido</p>
         <p class="error__texto">No tienes permiso para ver esta carpeta o archivo.</p>
-        <!-- Ruta absoluta: la pagina de error puede salir en cualquier carpeta del proyecto -->
-        <a class="error__boton" href="/MDCDAWProyectoDAW/indexProyectoDAW.php">Volver al inicio del proyecto</a>
+        <!-- Desde el subdominio el inicio del proyecto es la raiz (/). Desde el dominio principal es su carpeta (/MDCDAWProyectoDAW/) -->
+        <a class="error__boton" id="volverInicio" href="/">Volver al inicio del proyecto</a>
     </main>
 
     <footer class="pie">© Moisés Alberto Domínguez Cruz - IES Los Sauces</footer>
+
+    <script>
+        // Si la pagina se ve desde la carpeta del proyecto en el dominio principal, el inicio esta en esa carpeta
+        if (location.pathname.indexOf('/MDCDAWProyectoDAW/') === 0) {
+            document.getElementById('volverInicio').href = '/MDCDAWProyectoDAW/';
+        }
+    </script>
 </body>
 </html>
