@@ -149,13 +149,13 @@ Antes de publicar, en GitHub las ramas `master` y `developerMDC` tienen que apun
 | Proyecto | Versión | Base de datos |
 |----------|:-------:|:-------------:|
 | MDCProyectoDAW (portfolio) | 1.1.0 | No |
-| MDCDWESProyectoDWES | 1.0.0 | No |
-| MDCDWESProyectoTema3 | 1.0.0 | No |
-| MDCDWESProyectoTema4 | 1.0.0 | Sí |
-| MDCDWESProyectoTema5 | 1.0.0 | Sí |
-| MDCDWESProyectoLoginLogoffTema5 | 1.0.0 | Sí |
-| MDCCIBProyectoCIB | 1.0.0 | No |
-| MDCDAWProyectoDAW | 1.0.0 | No |
+| MDCDWESProyectoDWES | 1.0.1 | No |
+| MDCDWESProyectoTema3 | 1.0.1 | No |
+| MDCDWESProyectoTema4 | 1.0.1 | Sí |
+| MDCDWESProyectoTema5 | 1.0.1 | Sí |
+| MDCDWESProyectoLoginLogoffTema5 | 1.0.1 | Sí |
+| MDCCIBProyectoCIB | 1.0.1 | No |
+| MDCDAWProyectoDAW | 1.0.1 | No |
 
 ---
 
