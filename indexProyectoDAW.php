@@ -41,8 +41,9 @@
         <div class="tema">
           <h2 class="tema__titulo"><span class="tema__numero">UT2</span> Implantación, configuración y administración de servidores web</h2>
           <ul class="tema__practicas">
-            <li class="tema__practica tema__practica--pendiente"><a class="titulo-enlace" href="https://github.com/moisesdcsauces/MDCDAWProyectoDAW/blob/developer/doc/USED-ServidorWeb.md" target="_blank">USED-ServidorWeb.md</a></li>
-            <li class="tema__practica tema__practica--pendiente"><a class="titulo-enlace" href="https://github.com/moisesdcsauces/MDCDAWProyectoDAW/blob/developer/doc/W11ED-ClienteDesarrollo.md" target="_blank">W11ED-ClienteDesarrollo.md</a></li>
+            <li class="tema__practica tema__practica--pendiente"><a class="titulo-enlace" href="https://github.com/moisesdcsauces/MDCDAWProyectoDAW/blob/master/doc/USED-ServidorWeb.md" target="_blank">USED-ServidorWeb.md</a></li>
+            <li class="tema__practica tema__practica--pendiente"><a class="titulo-enlace" href="https://github.com/moisesdcsauces/MDCDAWProyectoDAW/blob/master/doc/W11ED-ClienteDesarrollo.md" target="_blank">W11ED-ClienteDesarrollo.md</a></li>
+            <li class="tema__practica tema__practica--pendiente"><a class="titulo-enlace" href="https://github.com/moisesdcsauces/MDCDAWProyectoDAW/blob/master/doc/PLESK-EntornoExplotacion.md" target="_blank">PLESK-EntornoExplotacion.md</a></li>
           </ul>
         </div>
 
